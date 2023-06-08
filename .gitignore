@@ -4,6 +4,9 @@
 #Credentials
 credentials.py
 
+#environment
+pyvenv.cfg
+
 ### Flask ###
 instance/*
 !instance/.gitignore
