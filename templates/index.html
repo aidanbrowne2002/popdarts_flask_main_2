@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href='../static/main.css' />
+    <title>League Table</title>
+</head>
+<body>
+    <h1>Current table as of {{ now }}</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>First Name </th>
+            <th>Rating</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for row in parse %}
+                <tr>
+                    <td>{{row[0]}}</td>
+                    <td id="column2">{{row[1]}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <table>
+        <thead>
+        <tr>
+            <th>First Name </th>
+            <th>Rating</th>
+            <th>Change Today</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for row in today %}
+                <tr>
+                    <td>{{row[0]}}</td>
+                    <td id="column2">{{row[1]}}</td>
+                    <td>{{ row[2] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<a href=match><button>Add a match</button></a></body>
+</html>

@@ -1,0 +1,15 @@
+table, th, td {
+  border: 1px solid;
+  border-collapse: collapse;
+  font-size:20px;
+  padding-top: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 5px;
+}
+#column2{
+  text-align: center;
+}
+button{
+  padding: 10;
+}

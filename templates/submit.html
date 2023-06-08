@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href='../static/main.css' />
+    <title>Title</title>
+</head>
+<body>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Score</th>
+            <th>rr change</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for row in result %}
+                <tr>
+                    <td>{{row[0]}}</td>
+                    <td id="column2">{{row[1]}}</td>
+                    <td>{{row[3]}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<a href="/"><button>Return Home</button></a>
+</body>
+</html>
