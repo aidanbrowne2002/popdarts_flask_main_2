@@ -1,7 +1,11 @@
 import psycopg2
 import credentials #database credentials
 def getTable():
-    conn = credentials.conn
+    conn = psycopg2.connect(database="postgres",
+                            host="aidanbrowne2002-189.postgres.eu.pythonanywhere-services.com",
+                            user="super",
+                            password="Chonks11!",
+                            port="10189")
     cursor = conn.cursor()
     Query = """SELECT f_name, rating FROM "Users" ORDER BY rating desc"""
     cursor.execute(Query)
@@ -10,7 +14,11 @@ def getTable():
     conn.close()
 
 def getChangeToday():
-    conn = credentials.conn
+    conn = psycopg2.connect(database="postgres",
+                            host="aidanbrowne2002-189.postgres.eu.pythonanywhere-services.com",
+                            user="super",
+                            password="Chonks11!",
+                            port="10189")
     cursor = conn.cursor()
     Query = """SELECT 
     "Users".f_name, 
