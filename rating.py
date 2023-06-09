@@ -6,6 +6,8 @@ def getTable():
     Query = """SELECT f_name, rating FROM "Users" ORDER BY rating desc"""
     cursor.execute(Query)
     return cursor.fetchall()
+    conn.commit()
+    conn.close()
 
 def getChangeToday():
     conn = credentials.conn
@@ -28,6 +30,8 @@ ORDER BY
     total_change DESC;"""
     cursor.execute(Query)
     return cursor.fetchall()
+    conn.commit()
+    conn.close()
 def get_k_factor(rating_difference, is_winner):
     if is_winner:
         if rating_difference > 200:
