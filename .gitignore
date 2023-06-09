@@ -6,7 +6,7 @@ credentials.py
 
 #environment
 pyvenv.cfg
-Scripts
+Scripts/
 
 ### Flask ###
 instance/*
