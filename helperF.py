@@ -12,7 +12,11 @@ def convertResult(result):
     data = [list(item) for item in result]
 
     Query = """SELECT id FROM "Users" WHERE f_name = %s"""
-    conn = credentials.conn
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
     cursor = conn.cursor()
     for x in range (0,2):
         cursor.execute(Query,(data[x][0],))

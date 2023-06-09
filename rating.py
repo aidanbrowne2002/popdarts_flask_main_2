@@ -1,11 +1,11 @@
 import psycopg2
 import credentials #database credentials
 def getTable():
-    conn = psycopg2.connect(database="postgres",
-                            host="aidanbrowne2002-189.postgres.eu.pythonanywhere-services.com",
-                            user="super",
-                            password="Chonks11!",
-                            port="10189")
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
     cursor = conn.cursor()
     Query = """SELECT f_name, rating FROM "Users" ORDER BY rating desc"""
     cursor.execute(Query)
@@ -14,11 +14,11 @@ def getTable():
     conn.close()
 
 def getChangeToday():
-    conn = psycopg2.connect(database="postgres",
-                            host="aidanbrowne2002-189.postgres.eu.pythonanywhere-services.com",
-                            user="super",
-                            password="Chonks11!",
-                            port="10189")
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
     cursor = conn.cursor()
     Query = """SELECT 
     "Users".f_name, 
@@ -100,14 +100,22 @@ def changerr(data):
     return (changeinrank1, changeinrank2)
 
 def getRank(id):
-    conn = credentials.conn
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
     cursor = conn.cursor()
     Query = """SELECT rating FROM "Users" WHERE id = %s;"""
     cursor.execute(Query,(id,))
     return cursor.fetchone()[0]
 
 def addMatch(results):
-    conn = credentials.conn
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
     cursor = conn.cursor()
     place = ("10 Shirley Road")
     if results[0][1]>results[1][1]:

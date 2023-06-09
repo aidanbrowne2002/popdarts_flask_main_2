@@ -2,7 +2,11 @@ import psycopg2
 import credentials #database credentials
 
 def getUsernames(): #Currently f_names
-    conn = credentials.conn
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
     cursor = conn.cursor()
     Query = """SELECT f_name FROM "Users";"""
     cursor.execute(Query)
@@ -14,7 +18,11 @@ def getUsernames(): #Currently f_names
 
 
 def getid(name): #currently f_name
-    conn = credentials.conn
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
     cursor = conn.cursor()
     Query = """SELECT id FROM "Users" where f_name = %s"""
     cursor.execute(Query, (name,))
