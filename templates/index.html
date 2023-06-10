@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href='../static/main.css' />
     <title>League Table</title>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href=match>Add Match</a></li>
+        <li><a href="/">Add User</a></li>
+    </ul>
 </head>
 <body>
     <h1>Current table as of {{ now }}</h1>
@@ -42,5 +47,5 @@
             {% endfor %}
         </tbody>
     </table>
-<a href=match><button>Add a match</button></a></body>
+<a href=match id="add_match"><button>Add a match</button></a></body>
 </html>

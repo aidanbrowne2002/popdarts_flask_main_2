@@ -1,4 +1,6 @@
+html, body{margin:0px; padding:0px;}
 table, th, td {
+  margin: 10;
   border: 1px solid;
   border-collapse: collapse;
   font-size:20px;
@@ -7,9 +9,47 @@ table, th, td {
   padding-right: 15px;
   padding-bottom: 5px;
 }
+table {
+width: 200px;
+margin: 20px 20px 20px 20px;
+}
+h1{
+  margin: 20px 20px 20px 20px;
+
+}
+#add_match{
+  margin: 20px 20px 20px 20px;
+
+}
+
 #column2{
   text-align: center;
 }
 button{
   padding: 10;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+  background-color: #111;
 }
