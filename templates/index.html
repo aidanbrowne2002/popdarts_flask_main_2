@@ -11,11 +11,11 @@
     </ul>
 </head>
 <body>
-    <h1>Current table as of {{ now }}</h1>
+    <h2>Current table as of {{ now }}</h2>
     <table>
         <thead>
         <tr>
-            <th>First Name </th>
+            <th>Name</th>
             <th>Rating</th>
         </tr>
         </thead>
@@ -28,13 +28,12 @@
             {% endfor %}
         </tbody>
     </table>
-    <br>
     <table>
         <thead>
         <tr>
-            <th>First Name </th>
+            <th>Name</th>
             <th>Rating</th>
-            <th>Change Today</th>
+            <th>Today</th>
         </tr>
         </thead>
         <tbody>
@@ -47,5 +46,4 @@
             {% endfor %}
         </tbody>
     </table>
-<a href=match id="add_match"><button>Add a match</button></a></body>
 </html>
