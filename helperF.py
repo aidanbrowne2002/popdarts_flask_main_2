@@ -1,5 +1,5 @@
 import datetime, psycopg2, rating
-import credentials #database credentials
+import credentials # database credentials
 
 def tStamp():
     timestamp = datetime.datetime.now()

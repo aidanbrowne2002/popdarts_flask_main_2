@@ -42,6 +42,21 @@ def submit_results():
     else:
         return "No data to commit", 400
 
+@app.route('/game')
+def game():
+    print("Filler")
+    """
+    - Screen with camera in the middle
+    - Top there is the round score board (green and blue) 0 | 0
+    - Button at the bottom "start game". Also options to enter player 1 and 2 (has to be a user from the database)
+    - When "start game" pressed button changes to "end round"
+    - When "end round" is pressed, all the processing for the image is done and the score is calculated
+    - Gives option to user (ref) to change scores and closest dart ext.
+    - Score board updates until its first to 11 points
+    - When first to 11 happens sends off to do all the autofill through the submit result tab
+    - Then goes to confirmation table
+    - Then either goes back to the game tab or home tab.
+    """
 
 if __name__ == '__main__':
     app.run()
