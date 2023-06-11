@@ -4,6 +4,10 @@
 #Credentials
 credentials.py
 
+# Temporary
+compVision/modelVisions/
+compVision/roundImg/
+
 #environment
 pyvenv.cfg
 Scripts/
