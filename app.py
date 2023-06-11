@@ -45,6 +45,13 @@ def submit_results():
 @app.route('/add_user')
 def add_user():
     return render_template("addUser.html")
+@app.route('/user_confirm', methods=['POST'])
+def user_confirm():
+    if request.method == 'POST':
+        results = request.form
+        print (results)
+    return render_template("confirm_user.html")
+
 
 
 if __name__ == '__main__':
