@@ -42,6 +42,10 @@ def submit_results():
     else:
         return "No data to commit", 400
 
+@app.route('/add_user')
+def add_user():
+    return render_template("addUser.html")
+
 
 if __name__ == '__main__':
     app.run()
