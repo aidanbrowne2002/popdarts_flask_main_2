@@ -56,7 +56,8 @@ def user_confirm():
     return render_template("confirm_user.html")
 @app.route('/graph')
 def graph():
-    return render_template("graphs.html")
+    data = rating.getRRChange(str(11))
+    return render_template("graphs.html", xdata = data[0], ydata = data[1], min = min(data[1]), max = max(data[1]))
 
 
 
