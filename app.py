@@ -1,10 +1,20 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 import psycopg2, rating, users, helperF as hf
+# CompVision Stuff
+import cv2
+
 
 app = Flask(__name__)
+camera = cv2.VideoCapture(0) # Probs will need to change this from 0 to something else
 app.secret_key = 'your_secret_key'
 
-
+def generate_frames():
+    while True:
+        success, frame = camera.read()
+        if not success:
+            break
+        else:
+            ret, buffer = cv2.imencode('.jpg',frame)
 @app.route('/')
 def table():
     return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday())
@@ -44,7 +54,12 @@ def submit_results():
 
 @app.route('/game')
 def game():
-    print("Filler")
+    return render_template("games.html")
+
+@app.route('/video')
+def video():
+    return Response(func(generate_frames),minetype='multipart/x-mixed-replace; boundary=frame')
+
     """
     - Screen with camera in the middle
     - Top there is the round score board (green and blue) 0 | 0
@@ -56,6 +71,16 @@ def game():
     - When first to 11 happens sends off to do all the autofill through the submit result tab
     - Then goes to confirmation table
     - Then either goes back to the game tab or home tab.
+    """
+
+    """
+    Data that needs to be kept (then put into a database for each game):
+    - Points per round (can do average points per round)
+    - Who was the closest per round (how many times did that player get the closest)
+    - Winner of each round (keep track how many times) / Winner of each game is already recored but can also be kept in this table
+    - How many rounds where there in that game
+    - Could keep tract of the closest dart in that game (and who did that)
+    - How many downs on the table / how many were stuck on the table (do an average for each player / Do this by [dartColour]Total - [dartColour]Up)
     """
 
 if __name__ == '__main__':
