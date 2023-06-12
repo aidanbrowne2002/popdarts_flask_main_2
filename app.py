@@ -49,13 +49,9 @@ def add_user():
 @app.route('/user_confirm', methods=['POST'])
 def user_confirm():
     if request.method == 'POST':
-        print (request.form)
         results = hf.convertFormUser(request.form)
-        print(results)
         users.addUser(results)
     return render_template("confirm_user.html")
-
-
 
 if __name__ == '__main__':
     app.run()
