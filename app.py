@@ -19,7 +19,7 @@ def add_match():
 def confirmation():
     if request.method == 'POST':
         result = request.form
-        result = hf.convertForm(result)
+        result = hf.convertFormMatch(result)
         session['result'] = result
         if result[0][1] > result[1][1]:
             winner = result[0][0]
@@ -45,11 +45,14 @@ def submit_results():
 @app.route('/add_user')
 def add_user():
     return render_template("addUser.html")
+
 @app.route('/user_confirm', methods=['POST'])
 def user_confirm():
     if request.method == 'POST':
-        results = request.form
-        print (results)
+        print (request.form)
+        results = hf.convertFormUser(request.form)
+        print(results)
+        users.addUser(results)
     return render_template("confirm_user.html")
 
 
