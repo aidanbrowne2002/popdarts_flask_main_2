@@ -27,3 +27,16 @@ def getid(name): #currently f_name
     Query = """SELECT id FROM "Users" where f_name = %s"""
     cursor.execute(Query, (name,))
     return (cursor.fetchone()[0])
+def addUser(data):
+    print(data)
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
+    cursor = conn.cursor()
+    Query = """INSERT INTO "Users"(F_NAME, L_NAME, DOB) VALUES (%s,%s,%s);"""
+    cursor.execute(Query, data)
+    conn.commit()
+    return
+

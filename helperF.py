@@ -5,8 +5,11 @@ def tStamp():
     timestamp = datetime.datetime.now()
     timestamp = timestamp.strftime("%m/%d/%Y, %H:%M:%S")
     return timestamp
-def convertForm(form):
+def convertFormMatch(form):
     data = ((form['name1'],int(form['score1'])),(form['name2'],int(form['score2'])))
+    return data
+def convertFormUser(form):
+    data = (form['first_name'], form['last_name'], form['dob'])
     return data
 def convertResult(result):
     data = [list(item) for item in result]
