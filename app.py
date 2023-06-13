@@ -68,16 +68,6 @@ def graph2():
     return render_template('graphs2.html', all_players_data=all_players_data)
 
 
-@app.route('/add_user')
-def add_user():
-    return render_template("addUser.html")
-
-@app.route('/user_confirm', methods=['POST'])
-def user_confirm():
-    if request.method == 'POST':
-        results = hf.convertFormUser(request.form)
-        users.addUser(results)
-    return render_template("confirm_user.html")
 
 
 @app.route('/game')
