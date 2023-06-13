@@ -62,9 +62,11 @@ def graph():
 
 @app.route('/graphbig')
 def graph2():
-    data = hf.getGraphData(7)
-    print (data)
-    return render_template("graphs2.html", converted_player_data = data)
+    # List of user ids you want to plot
+    all_players_data = hf.newgraphdata()
+    print (all_players_data)
+
+    return render_template('graphs2.html', all_players_data=all_players_data)
 
 
 if __name__ == '__main__':

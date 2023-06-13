@@ -1,5 +1,6 @@
 import datetime, psycopg2, rating
 import credentials #database credentials
+import users
 
 def tStamp():
     timestamp = datetime.datetime.now()
@@ -57,3 +58,33 @@ def getGraphData(user):
     data = convert_player_data(data)
 
     return data
+
+def newgraphdata():
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
+    cursor = conn.cursor()
+    user_ids = users.getIDs()  # Example user ids
+
+    all_players_data = {}
+    for user_id in user_ids:
+        Query = """SELECT "Matches".game_id, SUM("PlayerInGame".rr_change) as change FROM "PlayerInGame"
+                            INNER JOIN
+                                "Users" ON "PlayerInGame".player_id = "Users".id
+                            INNER JOIN
+                                "Matches" ON "Matches".game_id = "PlayerInGame".game_id
+                            WHERE player_id = %s
+                            GROUP BY "Matches".game_id
+                            order by game_id"""
+        cursor.execute(Query, (user_id,))
+        data = cursor.fetchall()
+        data = [list(item) for item in data]  # Convert tuples to lists
+        for x in range(1, len(data)):
+            data[x][1] = data[x][1] + data[x - 1][1]
+
+        player_name = users.getname(user_id)  # Use your function to get the user's name
+        all_players_data[player_name] = data  # Store each player's data using their name as the key
+
+    return all_players_data
