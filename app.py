@@ -60,6 +60,12 @@ def graph():
     return render_template("graphs.html", xdata = data[0], ydata = data[1], min = min(data[1]), max = max(data[1]))
 
 
+@app.route('/graphbig')
+def graph2():
+    data = hf.getGraphData(7)
+    print (data)
+    return render_template("graphs2.html", converted_player_data = data)
+
 
 if __name__ == '__main__':
     app.run()

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Rating Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="myChart"></canvas>
+    <script>
+        const playerData = {{ converted_player_data | tojson }}; // Use Flask's tojson filter to pass data to JavaScript
+
+        // Prepare the labels for the x-axis
+        let labels = playerData.map(game => game.game_sequence);
+
+        // Prepare the data for the y-axis
+        let ratings = playerData.map(game => game.rating);
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Player 1',
+                    data: ratings,
+                    fill: false,
+                    borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16), // Random color
+                    tension: 0.1
+                }]
+            },
+            options: {}
+        });
+    </script>
+</body>
+</html>
