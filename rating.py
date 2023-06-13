@@ -135,3 +135,23 @@ def addMatch(results):
         cursor.execute(Query, data)
     conn.commit()
     return gameid
+def getRRChange(user):
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
+    cursor = conn.cursor()
+    Query = """SELECT "PlayerInGame".rr_change, "Matches".game_id FROM "PlayerInGame"
+            inner join "Users" on "Users".id = "PlayerInGame".player_id
+            inner join "Matches" on "Matches".game_id = "PlayerInGame".game_id
+            where "Users".id = %s;"""
+    cursor.execute(Query, (user,))
+    data = cursor.fetchall()
+    x=[0]
+    y=[0]
+    for i in range (0, len(data)):
+        x.append(data[i][1])
+        y.append(y[i]+data[i][0])
+    data = (x,y)
+    return data

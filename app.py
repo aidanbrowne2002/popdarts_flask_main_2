@@ -6,7 +6,9 @@ app.secret_key = 'your_secret_key'
 
 @app.route('/')
 def table():
-    return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday())
+    all_players_data = hf.newgraphdata()
+    print (all_players_data)
+    return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data)
 
 
 @app.route('/match')
@@ -40,6 +42,30 @@ def submit_results():
         return render_template("submit.html", result=result)  # confirmation of commit
     else:
         return "No data to commit", 400
+
+@app.route('/add_user')
+def add_user():
+    return render_template("addUser.html")
+
+@app.route('/user_confirm', methods=['POST'])
+def user_confirm():
+    if request.method == 'POST':
+        print (request.form)
+        results = hf.convertFormUser(request.form)
+        print(results)
+        users.addUser(results)
+    return render_template("confirm_user.html")
+@app.route('/graph')
+def graph():
+    data = rating.getRRChange(str(11))
+    return render_template("graphs.html", xdata = data[0], ydata = data[1], min = min(data[1]), max = max(data[1]))
+
+
+@app.route('/graphbig')
+def graph2():
+    # List of user ids you want to plot
+    all_players_data = hf.newgraphdata()
+    return render_template('graphs2.html', all_players_data=all_players_data)
 
 
 @app.route('/add_user')

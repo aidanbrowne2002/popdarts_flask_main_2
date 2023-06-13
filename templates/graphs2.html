@@ -2,62 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href='../static/main.css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Rating Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>League Table</title>
-    <!-- Nav Bar -->
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href=match>Add Match</a></li>
-        <li><a href="/graph">graphs</a></li>
-        <li><a href="/graphbig">graphs</a></li>
-        <li><a href="/add_user">Add User</a></li>
-        <li><a href="/game">New Game</a></li>
-    </ul>
 </head>
 <body>
-    <h2>Current table as of {{ now }}</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Rating</th>
-        </tr>
-        </thead>
-        <tbody>
-            {% for row in parse %}
-                <tr>
-                    <td>{{row[0]}}</td>
-                    <td id="column2">{{row[1]}}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <table>
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Rating</th>
-            <th>Today</th>
-        </tr>
-        </thead>
-        <tbody>
-            {% for row in today %}
-                <tr>
-                    <td>{{row[0]}}</td>
-                    <td id="column2">{{row[1]}}</td>
-                    <td>{{ row[2] }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <div id="chart-container">
-        <canvas id="myChart"></canvas>
-    </div>
+    <canvas id="myChart"></canvas>
     <script>
     const allPlayersData = {{ all_players_data | tojson }}; // Use Flask's tojson filter to pass data to JavaScript
-    console.log(allPlayersData);
 
     // Prepare the labels for the x-axis
     let labels = [];
@@ -104,7 +56,7 @@
         },
         options: {}
     });
-    </script>
+</script>
 
 </body>
 </html>
