@@ -41,7 +41,7 @@ ORDER BY
     conn.commit()
     conn.close()
 
-def change_rr(data):
+def changerr(data):
     user_id1, score1, current_rating1 = data[0]
     user_id2, score2, current_rating2 = data[1]
 
