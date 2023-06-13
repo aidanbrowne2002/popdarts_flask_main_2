@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, Response
 import psycopg2, rating, users, helperF as hf
 
 app = Flask(__name__)
@@ -60,7 +60,7 @@ def game():
 
 @app.route('/video')
 def video():
-    return Response(func(hf.generate_frames),minetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(hf.generate_frames(),mimetype='multipart/x-mixed-replace; boundary=frame')
 
     """
     - Screen with camera in the middle
