@@ -1,5 +1,7 @@
 import datetime, psycopg2, rating
 import credentials # database credentials
+# CompVision Stuff
+import cv2
 
 def tStamp():
     timestamp = datetime.datetime.now()
@@ -28,3 +30,11 @@ def convertResult(result):
         data[x].append(rating.getRank(data[x][0]))
     return data
 
+def generate_frames():
+    camera = cv2.VideoCapture(0) # Probs will need to change this from 0 to something else
+    while True:
+        success, frame = camera.read()
+        if not success:
+            break
+        else:
+            ret, buffer = cv2.imencode('.jpg',frame)

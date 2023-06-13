@@ -1,20 +1,9 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 import psycopg2, rating, users, helperF as hf
-# CompVision Stuff
-import cv2
-
 
 app = Flask(__name__)
-camera = cv2.VideoCapture(0) # Probs will need to change this from 0 to something else
 app.secret_key = 'your_secret_key'
 
-def generate_frames():
-    while True:
-        success, frame = camera.read()
-        if not success:
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpg',frame)
 @app.route('/')
 def table():
     return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday())
@@ -71,7 +60,7 @@ def game():
 
 @app.route('/video')
 def video():
-    return Response(func(generate_frames),minetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(func(hf.generate_frames),minetype='multipart/x-mixed-replace; boundary=frame')
 
     """
     - Screen with camera in the middle
