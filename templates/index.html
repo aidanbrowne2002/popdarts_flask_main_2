@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href='../static/main.css' />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>League Table</title>
     <ul>
         <li><a href="/">Home</a></li>
@@ -48,4 +49,60 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <div id="chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
+    <script>
+    const allPlayersData = {{ all_players_data | tojson }}; // Use Flask's tojson filter to pass data to JavaScript
+    console.log(allPlayersData);
+
+    // Prepare the labels for the x-axis
+    let labels = [];
+    for (let player in allPlayersData) {
+        for (let game of allPlayersData[player]) {
+            if (!labels.includes(game[0])) {
+                labels.push(game[0]);
+            }
+        }
+    }
+    labels.sort((a, b) => a - b);  // Sort the labels to make sure they're in the correct order
+
+    // Prepare the datasets
+    let datasets = [];
+    for (let player in allPlayersData) {
+        let playerRatings = [];
+        let lastKnownRating = null;
+        for (let i = 0; i < labels.length; i++) {
+            let game = allPlayersData[player].find(game => game[0] === labels[i]);
+            if (game) {
+                playerRatings[i] = game[1];
+                lastKnownRating = game[1];
+            } else {
+                // If the data point is missing, use the last known rating
+                playerRatings[i] = lastKnownRating;
+            }
+        }
+
+        datasets.push({
+            label: player,
+            data: playerRatings,
+            fill: false,
+            borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16), // Random color
+            tension: 0.1
+        });
+    }
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {}
+    });
+    </script>
+
+</body>
 </html>

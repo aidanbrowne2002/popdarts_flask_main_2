@@ -7,7 +7,9 @@ app.secret_key = 'your_secret_key'
 
 @app.route('/')
 def table():
-    return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday())
+    all_players_data = hf.newgraphdata()
+    print (all_players_data)
+    return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data)
 
 
 @app.route('/match')
@@ -64,8 +66,6 @@ def graph():
 def graph2():
     # List of user ids you want to plot
     all_players_data = hf.newgraphdata()
-    print (all_players_data)
-
     return render_template('graphs2.html', all_players_data=all_players_data)
 
 

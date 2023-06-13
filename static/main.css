@@ -58,3 +58,15 @@ li a {
 li a:hover {
   background-color: #111;
 }
+
+/* Set the size of the container */
+#chart-container {
+  width: 600px;  /* Adjust as needed */
+  height: 400px;  /* Adjust as needed */
+}
+
+/* Make the canvas fill its container */
+#myChart {
+  width: 100%;
+  height: 100%;
+}
