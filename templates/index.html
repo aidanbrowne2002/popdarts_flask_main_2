@@ -56,8 +56,22 @@
         <canvas id="myChart"></canvas>
     </div>
     <script>
-    const allPlayersData = {{ all_players_data | tojson }}; // Use Flask's tojson filter to pass data to JavaScript
+    const allPlayersData = {{ all_players_data | tojson }};
     console.log(allPlayersData);
+
+    // Define an array of contrasting colors
+    const colors = [
+        '#FF0000', // Red
+        '#00FF00', // Green
+        '#0000FF', // Blue
+        '#FF00FF', // Magenta
+        '#FFFF00', // Yellow
+        '#00FFFF', // Cyan
+        '#800080', // Purple
+        '#FFA500', // Orange
+        '#008000', // Dark Green
+        '#800000', // Maroon
+    ];
 
     // Prepare the labels for the x-axis
     let labels = [];
@@ -68,10 +82,11 @@
             }
         }
     }
-    labels.sort((a, b) => a - b);  // Sort the labels to make sure they're in the correct order
+    labels.sort((a, b) => a - b);
 
     // Prepare the datasets
     let datasets = [];
+    let colorIndex = 0;
     for (let player in allPlayersData) {
         let playerRatings = [];
         let lastKnownRating = null;
@@ -81,7 +96,6 @@
                 playerRatings[i] = game[1];
                 lastKnownRating = game[1];
             } else {
-                // If the data point is missing, use the last known rating
                 playerRatings[i] = lastKnownRating;
             }
         }
@@ -90,9 +104,11 @@
             label: player,
             data: playerRatings,
             fill: false,
-            borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16), // Random color
+            borderColor: colors[colorIndex % colors.length], // Use a contrasting color from the array
             tension: 0.1
         });
+
+        colorIndex++;
     }
 
     var ctx = document.getElementById('myChart').getContext('2d');
@@ -104,7 +120,8 @@
         },
         options: {}
     });
-    </script>
+</script>
+
 
 </body>
 </html>
