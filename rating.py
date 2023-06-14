@@ -40,63 +40,35 @@ ORDER BY
     return cursor.fetchall()
     conn.commit()
     conn.close()
-def get_k_factor(rating_difference, is_winner):
-    if is_winner:
-        if rating_difference > 200:
-            return 10
-        elif rating_difference > 100:
-            return 20
-        elif rating_difference > 50:
-            return 30
-        else:
-            return 40
-    else:
-        if rating_difference < 50:
-            return 40
-        elif rating_difference < 100:
-            return 30
-        elif rating_difference < 200:
-            return 20
-        else:
-            return 15
-
-def get_min_loss(rating_difference):
-    if rating_difference < 50:
-        return -10
-    elif rating_difference < 100:
-        return -8
-    elif rating_difference < 200:
-        return -6
-    else:
-        return -4
 
 def changerr(data):
-    player1_rank = data[0][2]
-    player2_rank = data[1][2]
+    user_id1, score1, current_rating1 = data[0]
+    user_id2, score2, current_rating2 = data[1]
 
-    rank_difference = abs(player1_rank - player2_rank)
+    # Determine who won and the score difference
+    if score1 > score2:
+        winner = 1
+        score_diff = score1 - score2
+    elif score2 > score1:
+        winner = 2
+        score_diff = score2 - score1
+    else:
+        # If it's a draw, return 0 changes
+        return (0, 0)
 
-    is_winner_player1 = data[0][1] > data[1][1]
-    is_winner_player2 = not is_winner_player1
+    # Base change in rating, proportional to score difference with a minimum of 10
+    base_change = max(score_diff * 10, 10)
 
-    k_factor_player1 = get_k_factor(rank_difference, is_winner_player1)
-    k_factor_player2 = get_k_factor(rank_difference, is_winner_player2)
+    # Calculate bonus based on rating difference
+    if winner == 1:
+        bonus = max((current_rating2 - current_rating1) / 10, 0)
+        changeinrank1 = base_change + bonus
+        changeinrank2 = -base_change - bonus
+    else:
+        bonus = max((current_rating1 - current_rating2) / 10, 0)
+        changeinrank1 = -base_change - bonus
+        changeinrank2 = base_change + bonus
 
-    total_score = data[0][1] + data[1][1]
-    actualscore1 = data[0][1] / total_score
-    actualscore2 = data[1][1] / total_score
-
-    expectedscore1 = 1 / (1 + 10 ** ((player2_rank - player1_rank) / 400))
-    changeinrank1 = k_factor_player1 * (actualscore1 - expectedscore1)
-    min_loss1 = get_min_loss(rank_difference)
-    changeinrank1 = max(2, changeinrank1) if is_winner_player1 else min(min_loss1, changeinrank1)
-
-    expectedscore2 = 1 / (1 + 10 ** ((player1_rank - player2_rank) / 400))
-    changeinrank2 = k_factor_player2 * (actualscore2 - expectedscore2)
-    min_loss2 = get_min_loss(rank_difference)
-    changeinrank2 = max(2, changeinrank2) if is_winner_player2 else min(min_loss2, changeinrank2)
-
-    print(changeinrank1, changeinrank2)
     return (changeinrank1, changeinrank2)
 
 def getRank(id):
@@ -146,7 +118,7 @@ def getRRChange(user):
             inner join "Users" on "Users".id = "PlayerInGame".player_id
             inner join "Matches" on "Matches".game_id = "PlayerInGame".game_id
             where "Users".id = %s;"""
-    cursor.execute(Query, (user,))
+    cursor.execute(Quey, (user,))
     data = cursor.fetchall()
     x=[0]
     y=[0]
@@ -154,4 +126,4 @@ def getRRChange(user):
         x.append(data[i][1])
         y.append(y[i]+data[i][0])
     data = (x,y)
-    return data
+    return datar
