@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href='../static/main.css' />
+        <!-- Include any common stylesheets or scripts here -->
+    </head>
+    <body>
+        <header>
+            <div class="header-inner">
+                <div class="logo-title">
+                    <img src="../static/images/logo.png" alt="Logo" class="logo">
+                    <h1>PopDarts League</h1>
+                </div>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/match">Add Match</a></li>
+                        <li><a href="/graph">Graphs</a></li>
+                        <li><a href="/graphbig">Big Graphs</a></li>
+                        <li><a href="/add_user">Add User</a></li>
+                        <li><a href="/game">New Game</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+    </body>
+</html>

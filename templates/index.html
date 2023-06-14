@@ -1,148 +1,127 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href='../static/main.css' />
+{% extends "base.html" %}
+
+{% block title %}
+    League Table
+{% endblock %}
+
+{% block content %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>League Table</title>
-</head>
-<body>
-    <header>
-        <div class="header-inner">
-            <div class="logo-title">
-                <img src="../static/images/logo.png" alt="Logo" class="logo">  <!-- Replace with your logo source -->
-                <h1>PopDarts League</h1>  <!-- Replace with your site title -->
-            </div>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/match">Add Match</a></li>
-                    <li><a href="/graph">Graphs</a></li>
-                    <li><a href="/graphbig">Big Graphs</a></li>
-                    <li><a href="/add_user">Add User</a></li>
-                    <li><a href="/game">New Game</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
     <div class="content">
+        <main>
+            <section class="table-section">
+                <h3>Current table as of: <br> {{ now }}</h3>
+                <table class="league-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Rating</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in parse %}
+                            <tr>
+                                <td>{{row[0]}}</td>
+                                <td class="centered">{{row[1]}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+            <section class="table-section">
+                <h3>Today's Change</h3>
+                <table class="league-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Rating</th>
+                        <th>Today</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in today %}
+                            <tr>
+                                <td>{{row[0]}}</td>
+                                <td class="centered">{{row[1]}}</td>
+                                <td>{{ row[2] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
 
-    <main>
-        <section class="table-section">
-            <h3>Current table as of: <br> {{ now }}</h3>
-            <table class="league-table">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Rating</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {% for row in parse %}
-                        <tr>
-                            <td>{{row[0]}}</td>
-                            <td class="centered">{{row[1]}}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-        <section class="table-section">
-            <h3>Today's Change</h3>
-            <table class="league-table">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Rating</th>
-                    <th>Today</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {% for row in today %}
-                        <tr>
-                            <td>{{row[0]}}</td>
-                            <td class="centered">{{row[1]}}</td>
-                            <td>{{ row[2] }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
+            <div id="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+        </main>
+        <script>
+        const allPlayersData = {{ all_players_data | tojson }};
+        console.log(allPlayersData);
 
-        <div id="chart-container">
-            <canvas id="myChart"></canvas>
-        </div>
-    </main>
-    <script>
-    const allPlayersData = {{ all_players_data | tojson }};
-    console.log(allPlayersData);
+        // Define an array of contrasting colors
+        const colors = [
+            '#FF0000', // Red
+            '#00FF00', // Green
+            '#0000FF', // Blue
+            '#FF00FF', // Magenta
+            '#FFFF00', // Yellow
+            '#00FFFF', // Cyan
+            '#800080', // Purple
+            '#FFA500', // Orange
+            '#008000', // Dark Green
+            '#800000', // Maroon
+        ];
 
-    // Define an array of contrasting colors
-    const colors = [
-        '#FF0000', // Red
-        '#00FF00', // Green
-        '#0000FF', // Blue
-        '#FF00FF', // Magenta
-        '#FFFF00', // Yellow
-        '#00FFFF', // Cyan
-        '#800080', // Purple
-        '#FFA500', // Orange
-        '#008000', // Dark Green
-        '#800000', // Maroon
-    ];
-
-    // Prepare the labels for the x-axis
-    let labels = [];
-    for (let player in allPlayersData) {
-        for (let game of allPlayersData[player]) {
-            if (!labels.includes(game[0])) {
-                labels.push(game[0]);
+        // Prepare the labels for the x-axis
+        let labels = [];
+        for (let player in allPlayersData) {
+            for (let game of allPlayersData[player]) {
+                if (!labels.includes(game[0])) {
+                    labels.push(game[0]);
+                }
             }
         }
-    }
-    labels.sort((a, b) => a - b);
+        labels.sort((a, b) => a - b);
 
-    // Prepare the datasets
-    let datasets = [];
-    let colorIndex = 0;
-    for (let player in allPlayersData) {
-        let playerRatings = [];
-        let lastKnownRating = null;
-        for (let i = 0; i < labels.length; i++) {
-            let game = allPlayersData[player].find(game => game[0] === labels[i]);
-            if (game) {
-                playerRatings[i] = game[1];
-                lastKnownRating = game[1];
-            } else {
-                playerRatings[i] = lastKnownRating;
+        // Prepare the datasets
+        let datasets = [];
+        let colorIndex = 0;
+        for (let player in allPlayersData) {
+            let playerRatings = [];
+            let lastKnownRating = null;
+            for (let i = 0; i < labels.length; i++) {
+                let game = allPlayersData[player].find(game => game[0] === labels[i]);
+                if (game) {
+                    playerRatings[i] = game[1];
+                    lastKnownRating = game[1];
+                } else {
+                    playerRatings[i] = lastKnownRating;
+                }
             }
+
+            datasets.push({
+                label: player,
+                data: playerRatings,
+                fill: false,
+                borderColor: colors[colorIndex % colors.length], // Use a contrasting color from the array
+                tension: 0.1
+            });
+
+            colorIndex++;
         }
 
-        datasets.push({
-            label: player,
-            data: playerRatings,
-            fill: false,
-            borderColor: colors[colorIndex % colors.length], // Use a contrasting color from the array
-            tension: 0.1
-        });
+        var ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
 
-        colorIndex++;
-    }
-
-    var ctx = document.getElementById('myChart').getContext('2d');
-    new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: labels,
-        datasets: datasets
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false
-    }
-});
-
-    </script>
+        </script>
     </div>
-</body>
-</html>
+{% endblock %}

@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href='../static/main.css' />
-    <title>confirmation
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href=match>Add Match</a></li>
-        <li><a href="/">Add User</a></li>
-    </ul>
-    </title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}
+    Add Match
+{% endblock %}
+
+{% block content %}
 <h2>Confirm Results: {{ winner }} won the match</h2>
 <table>
         <thead>
@@ -33,5 +26,4 @@
       <label for="date">Confirm </label>
       <input type="submit" value="Submit">
     </form>
-</body>
-</html>
+{% endblock %}

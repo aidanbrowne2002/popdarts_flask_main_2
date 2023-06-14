@@ -1,7 +1,12 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
+
+{% block title %}
+    Add Match
+{% endblock %}
+
+{% block content %}
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-<body>
 <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
 
 <script>
@@ -31,7 +36,4 @@ new Chart("myChart", {
 });
 </script>
 
-</body>
-</html>
-
-
+{% endblock %}

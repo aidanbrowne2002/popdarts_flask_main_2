@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href='../static/main.css' />
-    <title>Title</title>
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href=match>Add Match</a></li>
-        <li><a href="/">Add User</a></li>
-    </ul>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}
+    Add Match
+{% endblock %}
+
+{% block content %}
     <table>
         <thead>
         <tr>
@@ -30,5 +24,4 @@
         </tbody>
     </table>
 <a href="/"><button>Return Home</button></a>
-</body>
-</html>
+{% endblock %}

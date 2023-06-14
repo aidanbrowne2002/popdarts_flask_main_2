@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player Rating Chart</title>
+{% extends "base.html" %}
+
+{% block title %}
+    Add Match
+{% endblock %}
+
+{% block content %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
     <canvas id="myChart"></canvas>
     <script>
     const allPlayersData = {{ all_players_data | tojson }}; // Use Flask's tojson filter to pass data to JavaScript
@@ -58,5 +57,4 @@
     });
 </script>
 
-</body>
-</html>
+{% endblock %}
