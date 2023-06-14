@@ -5,56 +5,72 @@
     <link rel="stylesheet" href='../static/main.css' />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>League Table</title>
-    <!-- Nav Bar -->
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href=match>Add Match</a></li>
-        <li><a href="/graph">graphs</a></li>
-        <li><a href="/graphbig">graphs</a></li>
-        <li><a href="/add_user">Add User</a></li>
-        <li><a href="/game">New Game</a></li>
-    </ul>
 </head>
-<body style="background-color:lightgrey;">
-    <h2>Current table as of {{ now }}</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Rating</th>
-        </tr>
-        </thead>
-        <tbody>
-            {% for row in parse %}
-                <tr>
-                    <td>{{row[0]}}</td>
-                    <td id="column2">{{row[1]}}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <table>
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Rating</th>
-            <th>Today</th>
-        </tr>
-        </thead>
-        <tbody>
-            {% for row in today %}
-                <tr>
-                    <td>{{row[0]}}</td>
-                    <td id="column2">{{row[1]}}</td>
-                    <td>{{ row[2] }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<body>
+    <header>
+        <div class="logo-title">
+            <img src='../images/logo-social.png' alt="Logo" class="logo">  <!-- Replace with your logo source -->
+            <h1>Your Site Title</h1>  <!-- Replace with your site title -->
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/match">Add Match</a></li>
+                <li><a href="/graph">Graphs</a></li>
+                <li><a href="/graphbig">Big Graphs</a></li>
+                <li><a href="/add_user">Add User</a></li>
+                <li><a href="/game">New Game</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="content">
 
-    <div id="chart-container">
-        <canvas id="myChart"></canvas>
-    </div>
+    <main>
+        <section class="table-section">
+            <h3>Current table as of: <br> {{ now }}</h3>
+            <table class="league-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Rating</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for row in parse %}
+                        <tr>
+                            <td>{{row[0]}}</td>
+                            <td class="centered">{{row[1]}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        <section class="table-section">
+            <h3>Today's Change</h3>
+            <table class="league-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Rating</th>
+                    <th>Today</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for row in today %}
+                        <tr>
+                            <td>{{row[0]}}</td>
+                            <td class="centered">{{row[1]}}</td>
+                            <td>{{ row[2] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <div id="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </main>
     <script>
     const allPlayersData = {{ all_players_data | tojson }};
     console.log(allPlayersData);
@@ -120,8 +136,7 @@
         },
         options: {}
     });
-</script>
-
-
+    </script>
+    </div>
 </body>
 </html>
