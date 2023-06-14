@@ -8,20 +8,22 @@
 </head>
 <body>
     <header>
-        <div class="logo-title">
-            <img src='../images/logo-social.png' alt="Logo" class="logo">  <!-- Replace with your logo source -->
-            <h1>Your Site Title</h1>  <!-- Replace with your site title -->
+        <div class="header-inner">
+            <div class="logo-title">
+                <img src="../static/images/logo.png" alt="Logo" class="logo">  <!-- Replace with your logo source -->
+                <h1>PopDarts League</h1>  <!-- Replace with your site title -->
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/match">Add Match</a></li>
+                    <li><a href="/graph">Graphs</a></li>
+                    <li><a href="/graphbig">Big Graphs</a></li>
+                    <li><a href="/add_user">Add User</a></li>
+                    <li><a href="/game">New Game</a></li>
+                </ul>
+            </nav>
         </div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/match">Add Match</a></li>
-                <li><a href="/graph">Graphs</a></li>
-                <li><a href="/graphbig">Big Graphs</a></li>
-                <li><a href="/add_user">Add User</a></li>
-                <li><a href="/game">New Game</a></li>
-            </ul>
-        </nav>
     </header>
     <div class="content">
 
@@ -129,13 +131,17 @@
 
     var ctx = document.getElementById('myChart').getContext('2d');
     new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: datasets
-        },
-        options: {}
-    });
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: datasets
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
     </script>
     </div>
 </body>
