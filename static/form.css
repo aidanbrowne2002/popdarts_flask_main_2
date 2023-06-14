@@ -1,0 +1,45 @@
+.btn {
+    margin: 5px;
+    padding: 10px;
+    text-decoration: none;
+    color: white;
+    background-color: #04aa6d;
+    display: inline-block;
+}
+
+.form-container {
+    width: 500px;
+    margin: auto;
+    padding: 5px;
+}
+
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.field {
+    flex: 1;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.field:last-child {
+    margin-right: 0;
+}
+
+.field input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 5px;
+}
+
+.submit-btn {
+    background-color: #04aa6d;
+    color: white;
+    padding: 10px 5px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}

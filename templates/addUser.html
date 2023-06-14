@@ -5,14 +5,26 @@
 {% endblock %}
 
 {% block content %}
-    <form id="myForm" action = "user_confirm" method="POST">
-      <label for="first_name">First Name:</label>
-      <input type="text" id="first_name" name="first_name" autocomplete="off" />
-      <label for="last_name">Last Name:</label>
-      <input type="text" id="last_name" name="last_name" />
-      <br>
-      <label for="dob">Date of Birth:</label>
-      <input type="date" id="dob" name="dob" autocomplete="off" />
-      <input type="submit">
-    </form>
+<link rel="stylesheet" href="../static/form.css">
+<div class="form-container">
+  <form id="myForm" action = "user_confirm" method="POST">
+    <div class="form-group">
+      <div class="field">
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" />
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="field">
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" autocomplete="off" />
+      </div>
+    </div>
+    <input type="submit" class="btn submit-btn">
+  </form>
+</div>
 {% endblock %}
