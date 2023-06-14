@@ -3,7 +3,7 @@ import cv2
 import os
 
 def get_board(img):
-    corner_points = [[126,48],[1102,38],[106,701],[1109,710]]
+    corner_points = [[77,28],[1079,12],[82,695],[1086,687]]
 
     width, height = int(1130), int(700)
     pts1 = np.float32(corner_points)

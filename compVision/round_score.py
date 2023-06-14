@@ -1,24 +1,6 @@
 from detecto import visualize
-import torch
+import helper as hp
 import math
-
-def clean_data(labels, boxes, scores):
-    new_labels, new_boxes, new_scores = [], [], []
-
-    for index in range(len(scores)): # Remove labels that its not confident
-        if scores[index] >= 0.9:
-            new_labels.append(labels[index])
-            new_boxes.append(boxes[index])
-            new_scores.append(scores[index])
-
-    new_boxes, new_scores = torch.stack(new_boxes), torch.stack(new_scores) # Merge Items to one tensor
-    # print(new_labels, '\n',new_boxes, '\n',new_scores)
-    # visualize.show_labeled_image(image, new_boxes, new_labels)
-
-    float_boxes = new_boxes.float()
-    center_darts = [torch.stack([(cord[0]+cord[2])/2,(cord[1]+cord[3])/2]) for cord in float_boxes]
-
-    return torch.stack(center_darts), new_labels, new_boxes, new_scores
 
 def find_closest(labels, darts):
     # Find target
@@ -48,20 +30,21 @@ def point_count(labels, center_darts): # Change team when Having UI system ready
             'green' : 0}
     index = 0
 
-    darts = [[labels[i],center_darts[i]] for i in range(len(labels))]
-    darts = sorted(darts, key=lambda x: x[1])
-    darts.pop(0) # Removes target
+    all_darts = [[labels[i],center_darts[i]] for i in range(len(labels))]
+    all_darts = sorted(all_darts, key=lambda x: x[1])
+    all_darts.pop(0) # Removes target
+    no_down_darts = [item for item in all_darts if 'down' not in item]
     # print(darts)
 
     # +2 to the closest dart v
-    if darts[0][0] == 'blueUp':
+    if no_down_darts[0][0] == 'blueUp':
         team['blue'] += 2
         closest = 'blue'
-    elif darts[0][0] == 'greenUp':
+    elif no_down_darts[0][0] == 'greenUp':
         team['green'] += 2
         closest = 'green'
     # +2 if the same colour is the next closest v
-    for dart in darts[1:]:
+    for dart in no_down_darts[1:]:
         if closest in dart[0]:
             team[closest] += 2
             index +=1
@@ -69,14 +52,14 @@ def point_count(labels, center_darts): # Change team when Having UI system ready
             index +=1
             break
     # +1 for all other colours when the other team is the next closest v
-    for dart in darts[index:]:
+    for dart in no_down_darts[index:]:
         if 'blue' in dart[0]:
             team['blue'] += 1
         elif 'green' in dart[0]:
             team['green'] += 1
         else: # This is when it finds a down dart
             continue
-    return closest, team
+    return closest, team, all_darts
 
 def recalabrate(closest, team):
     print(f"Closest: {closest} \nPoints: {team}")
@@ -90,9 +73,20 @@ def recalabrate(closest, team):
     team['green'] = green_input
 
     print(f"Closest: {closest} \nPoints: {team}")
+    return closest, team
 
     # send this to server thingy
 
+def dart_system(labels, center_darts):
+    distance = find_closest(labels, center_darts)
+
+    closest, dart_score, all_darts = point_count(labels, distance) # all_darts are for future stats
+
+    closest, team = recalabrate(closest, dart_score)
+    # visualize.show_labeled_image(image, boxes, distance)
+    # hp.plot_center(center_darts, image)
+
+    return closest, team, all_darts
 # Notes
 """
 
