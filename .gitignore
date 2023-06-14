@@ -5,8 +5,8 @@
 credentials.py
 
 # Temporary
-compVision/modelVisions/
-compVision/roundImg/
+Models_Versions/
+round_image/
 
 #environment
 pyvenv.cfg

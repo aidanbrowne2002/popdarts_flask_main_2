@@ -56,7 +56,7 @@ def user_confirm():
 
 @app.route('/game')
 def game():
-    return render_template("games.html")
+    return render_template("games.html", autocompleteData=users.getUsernames())
 
 @app.route('/video')
 def video():

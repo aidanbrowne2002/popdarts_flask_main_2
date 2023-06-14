@@ -46,6 +46,7 @@ img.center-image {
 /* Buttons centering Classes */
 div.center-buttons {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: flex-start;
+    margin-left: 30px;
 }
