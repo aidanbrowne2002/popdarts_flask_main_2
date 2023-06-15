@@ -1,8 +1,16 @@
 from flask import Flask, render_template, request, session, redirect, url_for, Response
 import psycopg2, rating, users, helperF as hf
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+
+#make shots directory to save pics
+try:
+    os.mkdir('./rounds')
+    os.mkdir('./all_rounds')
+except OSError as error:
+    pass
 
 @app.route('/')
 def table():
@@ -53,11 +61,11 @@ def user_confirm():
         results = hf.convertFormUser(request.form)
         users.addUser(results)
     return render_template("confirm_user.html")
+
 @app.route('/graph')
 def graph():
     data = rating.getRRChange(str(11))
     return render_template("graphs.html", xdata = data[0], ydata = data[1], min = min(data[1]), max = max(data[1]))
-
 
 @app.route('/graphbig')
 def graph2():
@@ -70,17 +78,22 @@ def graph2():
 def game():
     return render_template("game_start.html", autocompleteData=users.getUsernames())
 
+@app.route('/rounds', methods=['POST'])
+def rounds():
+    if request.method == 'POST': # Maybe another if statment
+        form = request.form
+        result = (form['name1'],form['team1']),(form['name2'],form['team2'])
+        print(result)
+
+        # if request.form.get('click') == 'End Round':
+        #     global capture
+        #     capture=1
+
+    return render_template('rounds.html')
+
 @app.route('/video')
 def video():
     return Response(hf.generate_frames(),mimetype='multipart/x-mixed-replace; boundary=frame')
-
-@app.route('/rounds', methods=['POST'])
-def rounds():
-    if request.method == 'POST':
-        result = request.form
-        print(result)
-        green_score, blue_score = 0,0
-    return render_template('rounds.html')#, g_score = green_score, b_score = blue_score)
 
 if __name__ == '__main__':
     app.run()

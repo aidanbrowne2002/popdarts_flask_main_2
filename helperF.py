@@ -3,6 +3,8 @@ import credentials #database credentials
 import users
 # CompVision Stuff
 import cv2
+import os
+
 
 def tStamp():
     timestamp = datetime.datetime.now()
@@ -106,3 +108,18 @@ def generate_frames():
             frame = buffer.tobytes()
         yield(b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') # generates the next frame
+
+def get_next_round_number():
+    saved_files = os.listdir('all_rounds')
+    round_numbers = []
+    for file in saved_files:
+        if file.startswith('round_') and file.endswith('.jpg'):
+            try:
+                round_number = int(file.split('_')[1].split('.')[0])
+                round_numbers.append(round_number)
+            except ValueError:
+                pass
+
+    if round_numbers:
+        return max(round_numbers) + 1
+    return 1
