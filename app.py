@@ -2,12 +2,17 @@ from flask import Flask, render_template, request, session, redirect, url_for, R
 import psycopg2, rating, users, helperF as hf, credentials
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
-
-
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
+#make shots directory to save pics
+try:
+    os.mkdir('./rounds')
+    os.mkdir('./all_rounds')
+except OSError as error:
+    pass
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -55,7 +60,6 @@ def utility_processor():
     def userChange():
         return rating.getchangetodaysingle(current_user.id)
     return dict(userChange=userChange)
-
 
 @app.route('/')
 def table():
@@ -110,11 +114,11 @@ def user_confirm():
         results = hf.convertFormUser(request.form)
         users.addUser(results)
     return render_template("confirm_user.html")
+
 @app.route('/graph')
 def graph():
     data = rating.getRRChange(str(11))
     return render_template("graphs.html", xdata = data[0], ydata = data[1], min = min(data[1]), max = max(data[1]))
-
 
 @app.route('/graphbig')
 def graph2():
@@ -122,44 +126,37 @@ def graph2():
     all_players_data = hf.newgraphdata()
     return render_template('graphs2.html', all_players_data=all_players_data)
 
-
-
-
+# ComputerVision Stuff
 @app.route('/game')
 def game():
-    return render_template("games.html", autocompleteData=users.getUsernames())
+    global capture
+    capture=0
+    return render_template("game_start.html", autocompleteData=users.getUsernames())
+
+@app.route('/rounds', methods=['POST'])
+def rounds():
+    if request.method == 'POST': # Maybe another if statment
+        form = request.form
+        result = (form['name1'],form['team1']),(form['name2'],form['team2'])
+        print(result)
+
+    return render_template('rounds.html')
+
+@app.route('/requests',methods=['POST','GET'])
+def tasks():
+    global switch,camera
+    if request.method == 'POST':
+        if request.form.get('click') == 'End Round':
+            global capture
+            capture=1
+
+    elif request.method=='GET':
+        return render_template('rounds.html')
+    return render_template('rounds.html')
 
 @app.route('/video')
 def video():
-    return Response(hf.generate_frames(),mimetype='multipart/x-mixed-replace; boundary=frame')
-
-    """
-    - Screen with camera in the middle
-    - Top there is the round score board (green and blue) 0 | 0
-    - Button at the bottom "start game". Also options to enter player 1 and 2 (has to be a user from the database)
-    - When "start game" pressed button changes to "end round"
-    - When "end round" is pressed, all the processing for the image is done and the score is calculated
-    - Gives option to user (ref) to change scores and closest dart ext.
-    - Score board updates until its first to 11 points
-    - When first to 11 happens sends off to do all the autofill through the submit result tab
-    - Then goes to confirmation table
-    - Then either goes back to the game tab or home tab.
-    """
-
-    """
-    Data that needs to be kept (then put into a database for each game):
-    - Points per round (can do average points per round)
-    - Who was the closest per round (how many times did that player get the closest)
-    - Winner of each round (keep track how many times) / Winner of each game is already recored but can also be kept in this table
-    - How many rounds where there in that game
-    - Could keep tract of the closest dart in that game (and who did that)
-    - How many downs on the table / how many were stuck on the table (do an average for each player / Do this by [dartColour]Total - [dartColour]Up)
-    """
-
-
-
-
-
+    return Response(hf.generate_frames(capture),mimetype='multipart/x-mixed-replace; boundary=frame')
 #User Login
 # User Login
 # Example usage
@@ -191,7 +188,6 @@ def logout():
 @login_required
 def protected():
     return redirect('/')
-
 
 if __name__ == '__main__':
     app.run()

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+    PopDarts Game
+{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href='../static/game_page.css' />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <body>
+        <div class="center-video">
+            <img src="{{url_for('video')}}" class="center-image">
+        </div>
+
+        <div class="center-button">
+            <form id="playerGame" action = "/rounds" method="POST">
+                <label for="name1">Name:</label>
+                <input type="text" id="name1" name="name1" autocomplete="off" />
+                <label for="team1">Team:</label>
+                <strong>Blue</strong>
+                <input type="hidden" id="team1" name="team1" value="Blue">
+                <br>
+                <label for="name2">Name :</label>
+                <input type="text" id="name2" name="name2" autocomplete="off" />
+                <label for="team2">Team:</label>
+                <strong>Green</strong>
+                <input type="hidden" id="team2" name="team2" value="Green">
+                <br>
+                <input type="submit">
+            </form>
+        </div>
+        <script>
+            $( function() {
+                var availableTags = {{ autocompleteData|tojson|safe }};
+
+                $("#name1, #name2").autocomplete({
+                    source: availableTags,
+                    autoFocus: true
+                });
+
+                $('#playerGame').on('submit', function(e){
+                    var name1 = $('#name1').val();
+                    var name2 = $('#name2').val();
+
+                    if(!availableTags.includes(name1) || !availableTags.includes(name2)) {
+                        alert('Please enter valid names.');
+                        e.preventDefault();
+                    }
+                });
+            });
+        </script>
+    </body>
+{% endblock %}

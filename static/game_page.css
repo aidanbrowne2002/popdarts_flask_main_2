@@ -1,31 +1,30 @@
-html, body{margin:0px; padding:0px;}
-button{
-  padding: 10;
-}
-
-ul {
-  list-style-type: none;
+body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  background-color: #333;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+.content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
 
-li {
-  float: left;
+.container {
+  width: 90%;
+  margin: 0 auto;
 }
 
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
+div.form-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-/* Change the link color to #111 (black) on hover */
-li a:hover {
-  background-color: #111;
+/*  */
+button{
+  padding: 10;
 }
 
 /* Video centering Classes */
@@ -44,9 +43,63 @@ img.center-image {
 }
 
 /* Buttons centering Classes */
-div.center-buttons {
+div.center-button {
     display: flex;
     justify-content: left;
     align-items: flex-start;
     margin-left: 30px;
 }
+
+div.center-new_round {
+  display: flex;
+  justify-content: left;
+  align-items: flex-start;
+  margin-left: 13%;
+}
+
+/* Score */
+.score-bar {
+  position: fixed;
+  top: 3%;
+  left: 17%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 400px; /* Adjust the width as needed */
+  height: 65px; /* Adjust the height as needed */
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: 20px;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
+}
+
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  flex-grow: 1;
+  border-radius: 20px;
+}
+
+.blue-team {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.green-team {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.team-name {
+  font-weight: bold;
+}
+
+.score {
+  font-size: 24px;
+  margin-top: 5px;
+}
+
