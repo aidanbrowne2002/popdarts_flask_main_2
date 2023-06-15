@@ -41,6 +41,34 @@ ORDER BY
     conn.commit()
     conn.close()
 
+def getchangetodaysingle(id):
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
+    cursor = conn.cursor()
+    Query = """SELECT
+    "Users".id,
+    SUM("PlayerInGame".rr_change) as total_change
+FROM
+    "PlayerInGame"
+INNER JOIN
+    "Users" ON "PlayerInGame".player_id = "Users".id
+INNER JOIN
+    "Matches" ON "Matches".game_id = "PlayerInGame".game_id
+WHERE
+    "Matches".occured >= CURRENT_DATE-1 and "Users".id = %s
+GROUP BY
+    "Users".id
+ORDER BY
+    total_change DESC;"""
+    cursor.execute(Query,(id,))
+    return cursor.fetchone()[1]
+    conn.commit()
+    conn.close()
+
+
 def changerr(data):
     user_id1, score1, current_rating1 = data[0]
     user_id2, score2, current_rating2 = data[1]
@@ -118,7 +146,7 @@ def getRRChange(user):
             inner join "Users" on "Users".id = "PlayerInGame".player_id
             inner join "Matches" on "Matches".game_id = "PlayerInGame".game_id
             where "Users".id = %s;"""
-    cursor.execute(Quey, (user,))
+    cursor.execute(Query, (user,))
     data = cursor.fetchall()
     x=[0]
     y=[0]
@@ -126,4 +154,4 @@ def getRRChange(user):
         x.append(data[i][1])
         y.append(y[i]+data[i][0])
     data = (x,y)
-    return datar
+    return data

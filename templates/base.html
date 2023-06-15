@@ -13,6 +13,12 @@
                     <img src="../static/images/logo.png" alt="Logo" class="logo">
                     <h1>{% if current_user.is_authenticated %}
                             Hello {{ current_user.name }}
+                            <font color="#0352fc">({{ current_user.rating }})</font>
+                            {% if userChange > 0 %}
+                                <font color="#03fc03"> +{{ userChange }}</font>
+                            {% elif userChange < 0%}
+                                <font color="#fc0303"> {{ userChange }}</font>
+                            {% endif %}
                         {% else %}
                             Popdarts League
                         {% endif %}</h1>

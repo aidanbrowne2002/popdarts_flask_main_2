@@ -18,17 +18,18 @@ class User(UserMixin):
         self.name = name
         self.username = username
         self.password = password
+        self.rating = rating
         if name is None and username is None:
             self.get_user_details()
 
     def get_user_details(self):
         conn = psycopg2.connect(database=credentials.database, user=credentials.user, password=credentials.password, host=credentials.host, port=credentials.port)
         cur = conn.cursor()
-        cur.execute("""SELECT id, f_name, username, hashed_pass from "Users" WHERE id = %s""", (self.id,))
+        cur.execute("""SELECT id, f_name, username, hashed_pass, rating from "Users" WHERE id = %s""", (self.id,))
         result = cur.fetchone()
         conn.close()
         if result:
-            self.id, self.name, self.username, self.password = result
+            self.id, self.name, self.username, self.password, self.rating = result
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -41,8 +42,12 @@ def load_user(user_id):
 
 @app.route('/')
 def table():
+    if current_user.is_authenticated:
+        userChange = rating.getchangetodaysingle(current_user.id)
+    else:
+        userChange = None
     all_players_data = hf.newgraphdata()
-    return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data)
+    return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data, userChange = userChange)
 
 
 @app.route('/match')
