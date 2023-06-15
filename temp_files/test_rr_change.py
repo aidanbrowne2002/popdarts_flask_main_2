@@ -1,11 +1,11 @@
 id_1 = 7
 id_2 = 3
 
-score_1 = 0
-score_2 = 3
+score_1 = 3
+score_2 = 1
 
-rating_1 = 720
-rating_2 = 400
+rating_1 = 711
+rating_2 = 474
 
 data = [[id_1, score_1, rating_1],[id_2, score_2, rating_2]]
 
