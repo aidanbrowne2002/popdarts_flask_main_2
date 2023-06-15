@@ -37,12 +37,26 @@ def load_user(user_id):
     return user
 
 
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
+
+
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
+
+
 @app.route('/')
 def table():
-    if current_user.is_authenticated:
-        print(current_user.name)
-    else:
-        print('No user is currently logged in.')
+    print(current_user.name)
     all_players_data = hf.newgraphdata()
     return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data)
 
@@ -143,6 +157,8 @@ def video():
 
 #User Login
 # User Login
+# Example usage
+# User Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -150,7 +166,7 @@ def login():
     elif request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        user = User(username)
+        user = User(users.getIdFromUsername(username))
         if user.username is not None and check_password_hash(user.password, password):  # valid user found in DB
             login_user(user)
             return redirect(url_for('protected'))

@@ -21,8 +21,11 @@
                         <li><a href="/graphbig">Big Graphs</a></li>
                         <li><a href="/add_user">Add User</a></li>
                         <li><a href="/game">New Game</a></li>
-                        <li><a href="/login">Login</a></li>
-                        <li><a href="/logout">Logout</a></li>
+                        {% if current_user.is_authenticated %}
+                            <li><a href="/logout">Logout</a></li>
+                        {% else %}
+                            <li><a href="/login">Login</a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>

@@ -31,7 +31,7 @@ def getIDs():
         result.append(data[x][0])
     return result
 
-def getid(name): #currently f_name
+def getIdFromName(name): #currently f_name
     conn = psycopg2.connect(database=credentials.database,
                             host=credentials.host,
                             user=credentials.user,
@@ -41,6 +41,18 @@ def getid(name): #currently f_name
     Query = """SELECT id FROM "Users" where f_name = %s"""
     cursor.execute(Query, (name,))
     return (cursor.fetchone()[0])
+def getIdFromUsername(name): #currently f_name
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
+    cursor = conn.cursor()
+    Query = """SELECT id FROM "Users" where username = %s"""
+    cursor.execute(Query, (name,))
+    return (cursor.fetchone()[0])
+
+
 def addUser(data):
     print(data)
     conn = psycopg2.connect(database=credentials.database,
