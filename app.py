@@ -76,6 +76,8 @@ def graph2():
 # ComputerVision Stuff
 @app.route('/game')
 def game():
+    global capture
+    capture=0
     return render_template("game_start.html", autocompleteData=users.getUsernames())
 
 @app.route('/rounds', methods=['POST'])
@@ -85,15 +87,23 @@ def rounds():
         result = (form['name1'],form['team1']),(form['name2'],form['team2'])
         print(result)
 
-        # if request.form.get('click') == 'End Round':
-        #     global capture
-        #     capture=1
+    return render_template('rounds.html')
 
+@app.route('/requests',methods=['POST','GET'])
+def tasks():
+    global switch,camera
+    if request.method == 'POST':
+        if request.form.get('click') == 'End Round':
+            global capture
+            capture=1
+
+    elif request.method=='GET':
+        return render_template('rounds.html')
     return render_template('rounds.html')
 
 @app.route('/video')
 def video():
-    return Response(hf.generate_frames(),mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(hf.generate_frames(capture),mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
     app.run()

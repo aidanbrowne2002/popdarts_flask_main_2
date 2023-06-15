@@ -5,6 +5,7 @@ import users
 import cv2
 import os
 
+camera = cv2.VideoCapture(0) # Probs will need to change this from 0 to something else (Global)
 
 def tStamp():
     timestamp = datetime.datetime.now()
@@ -97,29 +98,39 @@ def newgraphdata():
     return all_players_data
 
 # Computer Vision Stuff
-def generate_frames():
-    camera = cv2.VideoCapture(0) # Probs will need to change this from 0 to something else
+def generate_frames(capture):
     while True:
         success, frame = camera.read()
         if not success:
             break
-        else:
+        if capture:
+            capture=0
+            p = os.path.sep.join(['rounds', f"rounds_{get_next_round_number()}.jpg"])
+            cv2.imwrite(p, frame)
+        try:
             ret, buffer = cv2.imencode('.jpg',frame)
             frame = buffer.tobytes()
-        yield(b'--frame\r\n'
+            yield(b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') # generates the next frame
+        except Exception as e:
+            pass
 
 def get_next_round_number():
-    saved_files = os.listdir('all_rounds')
-    round_numbers = []
-    for file in saved_files:
-        if file.startswith('round_') and file.endswith('.jpg'):
-            try:
-                round_number = int(file.split('_')[1].split('.')[0])
-                round_numbers.append(round_number)
-            except ValueError:
-                pass
+    saved_files, temp_files = os.listdir('all_rounds'), os.listdir('rounds')
+    print(saved_files, temp_files)
+    if saved_files:
+        round_numbers = get_files(saved_files)
+    else:
+        print("went here")
+        round_numbers = get_files(temp_files)
 
     if round_numbers:
         return max(round_numbers) + 1
     return 1
+
+def get_files(dir):
+    round_numbers = []
+    for file in dir:
+        round_number = int(file.split('_')[1].split('.')[0])
+        round_numbers.append(round_number)
+    return round_numbers
