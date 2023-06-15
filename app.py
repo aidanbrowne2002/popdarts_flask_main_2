@@ -37,17 +37,17 @@ def load_user(user_id):
     user.get_user_details()
     return user
 
-
+@app.context_processor
+def utility_processor():
+    def userChange():
+        return rating.getchangetodaysingle(current_user.id)
+    return dict(userChange=userChange)
 
 
 @app.route('/')
 def table():
-    if current_user.is_authenticated:
-        userChange = rating.getchangetodaysingle(current_user.id)
-    else:
-        userChange = None
     all_players_data = hf.newgraphdata()
-    return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data, userChange = userChange)
+    return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data)
 
 
 @app.route('/match')
