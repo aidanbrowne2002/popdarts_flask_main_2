@@ -158,3 +158,4 @@ def getRRChange(user):
         y.append(y[i]+data[i][0])
     data = (x,y)
     return data
+
