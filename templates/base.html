@@ -11,7 +11,11 @@
             <div class="header-inner">
                 <div class="logo-title">
                     <img src="../static/images/logo.png" alt="Logo" class="logo">
-                    <h1>PopDarts League</h1>
+                    <h1>{% if current_user.is_authenticated %}
+                            Hello {{ current_user.name }}
+                        {% else %}
+                            Popdarts League
+                        {% endif %}</h1>
                 </div>
                 <nav>
                     <ul class="nav-links">
@@ -21,6 +25,11 @@
                         <li><a href="/graphbig">Big Graphs</a></li>
                         <li><a href="/add_user">Add User</a></li>
                         <li><a href="/game">New Game</a></li>
+                        {% if current_user.is_authenticated %}
+                            <li><a href="/logout">Logout</a></li>
+                        {% else %}
+                            <li><a href="/login">Login</a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>

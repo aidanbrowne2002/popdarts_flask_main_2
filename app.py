@@ -1,22 +1,58 @@
 from flask import Flask, render_template, request, session, redirect, url_for, Response
-import psycopg2, rating, users, helperF as hf
+import psycopg2, rating, users, helperF as hf, credentials
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from werkzeug.security import check_password_hash
+
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+# Create a user class with UserMixin
+class User(UserMixin):
+    def __init__(self, id, name=None, username=None, password=None):
+        self.id = id
+        self.name = name
+        self.username = username
+        self.password = password
+        if name is None and username is None:
+            self.get_user_details()
+
+    def get_user_details(self):
+        conn = psycopg2.connect(database=credentials.database, user=credentials.user, password=credentials.password, host=credentials.host, port=credentials.port)
+        cur = conn.cursor()
+        cur.execute("""SELECT id, f_name, username, hashed_pass from "Users" WHERE id = %s""", (self.id,))
+        result = cur.fetchone()
+        conn.close()
+        if result:
+            self.id, self.name, self.username, self.password = result
+
+@login_manager.user_loader
+def load_user(user_id):
+    user = User(user_id)
+    user.get_user_details()
+    return user
+
+
+
+
 @app.route('/')
 def table():
     all_players_data = hf.newgraphdata()
-    print (all_players_data)
     return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data)
 
 
 @app.route('/match')
+@login_required
 def add_match():
     return render_template('addMatch.html', autocompleteData=users.getUsernames())
 
 
 @app.route('/confirmation', methods=['POST'])
+@login_required
 def confirmation():
     if request.method == 'POST':
         result = request.form
@@ -30,6 +66,7 @@ def confirmation():
 
 
 @app.route('/submitted', methods=['POST'])
+@login_required
 def submit_results():
     result = session.get('result', None)
     if result is not None:
@@ -44,10 +81,12 @@ def submit_results():
         return "No data to commit", 400
 
 @app.route('/add_user')
+@login_required
 def add_user():
     return render_template("addUser.html")
 
 @app.route('/user_confirm', methods=['POST'])
+@login_required
 def user_confirm():
     if request.method == 'POST':
         results = hf.convertFormUser(request.form)
@@ -98,6 +137,40 @@ def video():
     - Could keep tract of the closest dart in that game (and who did that)
     - How many downs on the table / how many were stuck on the table (do an average for each player / Do this by [dartColour]Total - [dartColour]Up)
     """
+
+
+
+
+
+#User Login
+# User Login
+# Example usage
+# User Login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = User(users.getIdFromUsername(username))
+        if user.username is not None and check_password_hash(user.password, password):  # valid user found in DB
+            login_user(user)
+            return redirect(url_for('protected'))
+        else:
+            return 'Bad login'
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
+
+@app.route('/protected')
+@login_required
+def protected():
+    return redirect('/')
+
 
 if __name__ == '__main__':
     app.run()

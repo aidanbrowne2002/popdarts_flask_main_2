@@ -1,6 +1,7 @@
 import datetime, psycopg2, rating
 import credentials #database credentials
 import users
+from werkzeug.security import check_password_hash, generate_password_hash
 # CompVision Stuff
 import cv2
 
