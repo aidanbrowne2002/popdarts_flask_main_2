@@ -94,6 +94,7 @@ def newgraphdata():
 
     return all_players_data
 
+# Computer Vision Stuff
 def generate_frames():
     camera = cv2.VideoCapture(0) # Probs will need to change this from 0 to something else
     while True:

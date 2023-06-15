@@ -65,39 +65,22 @@ def graph2():
     all_players_data = hf.newgraphdata()
     return render_template('graphs2.html', all_players_data=all_players_data)
 
-
-
-
+# ComputerVision Stuff
 @app.route('/game')
 def game():
-    return render_template("games.html", autocompleteData=users.getUsernames())
+    return render_template("game_start.html", autocompleteData=users.getUsernames())
 
 @app.route('/video')
 def video():
     return Response(hf.generate_frames(),mimetype='multipart/x-mixed-replace; boundary=frame')
 
-    """
-    - Screen with camera in the middle
-    - Top there is the round score board (green and blue) 0 | 0
-    - Button at the bottom "start game". Also options to enter player 1 and 2 (has to be a user from the database)
-    - When "start game" pressed button changes to "end round"
-    - When "end round" is pressed, all the processing for the image is done and the score is calculated
-    - Gives option to user (ref) to change scores and closest dart ext.
-    - Score board updates until its first to 11 points
-    - When first to 11 happens sends off to do all the autofill through the submit result tab
-    - Then goes to confirmation table
-    - Then either goes back to the game tab or home tab.
-    """
-
-    """
-    Data that needs to be kept (then put into a database for each game):
-    - Points per round (can do average points per round)
-    - Who was the closest per round (how many times did that player get the closest)
-    - Winner of each round (keep track how many times) / Winner of each game is already recored but can also be kept in this table
-    - How many rounds where there in that game
-    - Could keep tract of the closest dart in that game (and who did that)
-    - How many downs on the table / how many were stuck on the table (do an average for each player / Do this by [dartColour]Total - [dartColour]Up)
-    """
+@app.route('/rounds', methods=['POST'])
+def rounds():
+    if request.method == 'POST':
+        result = request.form
+        print(result)
+        green_score, blue_score = 0,0
+    return render_template('rounds.html')#, g_score = green_score, b_score = blue_score)
 
 if __name__ == '__main__':
     app.run()

@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Filler
+    PopDarts Game
 {% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href='../static/game_page.css' />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <body>
@@ -12,17 +14,19 @@
             <img src="{{url_for('video')}}" class="center-image">
         </div>
 
-        <div class="center-buttons">
-            <form id="myForm" action = "/" method="POST">
+        <div class="center-button">
+            <form id="playerGame" action = "/rounds" method="POST">
                 <label for="name1">Name:</label>
                 <input type="text" id="name1" name="name1" autocomplete="off" />
-                <label for="score2">Team:</label>
-                <input type="text" id="team1" name="team1" />
+                <label for="team1">Team:</label>
+                <strong>Blue</strong>
+                <input type="hidden" id="team1" name="team1" value="Blue">
                 <br>
                 <label for="name2">Name :</label>
                 <input type="text" id="name2" name="name2" autocomplete="off" />
-                <label for="score2">Team:</label>
-                <input type="text" id="team2" name="team2" />
+                <label for="team2">Team:</label>
+                <strong>Green</strong>
+                <input type="hidden" id="team2" name="team2" value="Green">
                 <br>
                 <input type="submit">
             </form>
@@ -32,11 +36,11 @@
                 var availableTags = {{ autocompleteData|tojson|safe }};
 
                 $("#name1, #name2").autocomplete({
-                source: availableTags,
-                autoFocus: true
+                    source: availableTags,
+                    autoFocus: true
                 });
 
-                $('#myForm').on('submit', function(e){
+                $('#playerGame').on('submit', function(e){
                     var name1 = $('#name1').val();
                     var name2 = $('#name2').val();
 
