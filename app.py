@@ -157,7 +157,8 @@ def tasks():
 @app.route('/video')
 def video():
     return Response(hf.generate_frames(capture),mimetype='multipart/x-mixed-replace; boundary=frame')
-#User Login
+
+# User Login
 # User Login
 # Example usage
 # User Login
