@@ -38,35 +38,21 @@ def load_user(user_id):
 
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User(user_id)
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User(user_id)
-
-
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User(user_id)
-
 
 @app.route('/')
 def table():
-    print(current_user.name)
     all_players_data = hf.newgraphdata()
     return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data)
 
 
 @app.route('/match')
+@login_required
 def add_match():
     return render_template('addMatch.html', autocompleteData=users.getUsernames())
 
 
 @app.route('/confirmation', methods=['POST'])
+@login_required
 def confirmation():
     if request.method == 'POST':
         result = request.form
@@ -80,6 +66,7 @@ def confirmation():
 
 
 @app.route('/submitted', methods=['POST'])
+@login_required
 def submit_results():
     result = session.get('result', None)
     if result is not None:
@@ -94,10 +81,12 @@ def submit_results():
         return "No data to commit", 400
 
 @app.route('/add_user')
+@login_required
 def add_user():
     return render_template("addUser.html")
 
 @app.route('/user_confirm', methods=['POST'])
+@login_required
 def user_confirm():
     if request.method == 'POST':
         print (request.form)
