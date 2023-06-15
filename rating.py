@@ -64,7 +64,10 @@ GROUP BY
 ORDER BY
     total_change DESC;"""
     cursor.execute(Query,(id,))
-    return cursor.fetchone()[1]
+    try:
+        return cursor.fetchone()[1]
+    except:
+        return 0
     conn.commit()
     conn.close()
 
