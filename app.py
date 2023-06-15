@@ -31,6 +31,19 @@ class User(UserMixin):
         if result:
             self.id, self.name, self.username, self.password, self.rating = result
 
+    @staticmethod
+    def getIdFromUsername(username):
+        conn = psycopg2.connect(database=credentials.database, user=credentials.user, password=credentials.password,
+                                host=credentials.host, port=credentials.port)
+        cursor = conn.cursor()
+        cursor.execute("""SELECT id FROM "Users" WHERE username = %s""", (username,))
+        result = cursor.fetchone()
+        conn.close()
+        if result is not None:
+            return result[0]
+        else:
+            return None
+
 @login_manager.user_loader
 def load_user(user_id):
     user = User(user_id)
@@ -158,8 +171,11 @@ def login():
     elif request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        user = User(users.getIdFromUsername(username))
-        if user.username is not None and check_password_hash(user.password, password):  # valid user found in DB
+        user_id = users.getIdFromUsername(username)
+        if user_id is None:  # username not found in DB
+            return 'Bad login'
+        user = User(user_id)
+        if check_password_hash(user.password, password):  # valid user found in DB
             login_user(user)
             return redirect(url_for('protected'))
         else:
