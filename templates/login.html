@@ -5,11 +5,26 @@
 {% endblock %}
 
 {% block content %}
-    <form method="POST">
-        Username:<br>
-        <input type="text" name="username"><br>
-        Password:<br>
-        <input type="password" name="password"><br>
-        <input type="submit" value="Submit">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="../static/form.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<div class="form-container">
+    <form id="loginForm" method="POST">
+        <div class="form-group">
+            <div class="field">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" autocomplete="off" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="field">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" />
+            </div>
+        </div>
+        <input type="submit" value="Submit" class="btn submit-btn">
     </form>
+</div>
 {% endblock %}
