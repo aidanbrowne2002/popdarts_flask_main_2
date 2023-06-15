@@ -1,4 +1,29 @@
-html, body{margin:0px; padding:0px;}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+.content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+div.form-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+
+/*  */
 button{
   padding: 10;
 }
