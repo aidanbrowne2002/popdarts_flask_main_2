@@ -118,12 +118,21 @@ def generate_frames(capture):
 
 def get_next_round_number():
     saved_files, temp_files = os.listdir('all_rounds'), os.listdir('rounds')
-    print(saved_files, temp_files)
     if saved_files:
         round_numbers = get_files(saved_files)
     else:
-        print("went here")
         round_numbers = get_files(temp_files)
+    if round_numbers:
+        return max(round_numbers) + 1
+    return 1
+
+def get_files(dir):
+    round_numbers = []
+    for file in dir:
+        round_number = int(file.split('_')[1].split('.')[0])
+        round_numbers.append(round_number)
+    return round_numbers
+
 def getScoreMA(userID):
     conn = psycopg2.connect(database=credentials.database,
                             host=credentials.host,
@@ -150,14 +159,3 @@ def getScoreMA(userID):
     y.remove(0)
     data = (x, y)
     return data
-
-    if round_numbers:
-        return max(round_numbers) + 1
-    return 1
-
-def get_files(dir):
-    round_numbers = []
-    for file in dir:
-        round_number = int(file.split('_')[1].split('.')[0])
-        round_numbers.append(round_number)
-    return round_numbers

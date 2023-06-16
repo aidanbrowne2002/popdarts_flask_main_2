@@ -4,21 +4,23 @@
     <body>
         <div class="score-bar">
             <div class="team blue-team">
-              <!-- <div class="team-name">Blue</div> -->
+              <div class="team-name" id="name1">{{ player_blue }}</div>
               <div class="score">0</div>
             </div>
             <div class="team green-team">
-              <!-- <div class="team-name">Green</div> -->
+              <div class="team-name" id="name2">{{ player_green }}</div>
               <div class="score">0</div>
             </div>
         </div>
         <div class="center-video">
             <img src="{{url_for('video')}}" class="center-image">
         </div>
-        <form id="submit_round" action = "/requests" method="POST">
+        <form id="submit_round" action = "/rounds" method="POST">
             <div class="center-new_round">
                 <input type="submit" value="End Round" name="click">
             </div>
+            <input type="hidden" name="name1" value="{{ player_blue }}">
+            <input type="hidden" name="name2" value="{{ player_green }}">
         </form>
     </body>
 </html>

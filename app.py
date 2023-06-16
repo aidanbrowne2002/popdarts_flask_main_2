@@ -13,6 +13,7 @@ try:
     os.mkdir('./all_rounds')
 except OSError as error:
     pass
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -134,25 +135,15 @@ def game():
     capture=0
     return render_template("game_start.html", autocompleteData=users.getUsernames())
 
-@app.route('/rounds', methods=['POST'])
+@app.route('/rounds',methods=['POST'])
 def rounds():
     if request.method == 'POST': # Maybe another if statment
-        form = request.form
-        result = (form['name1'],form['team1']),(form['name2'],form['team2'])
-        print(result)
-
-    return render_template('rounds.html')
-
-@app.route('/requests',methods=['POST','GET'])
-def tasks():
-    global switch,camera
-    if request.method == 'POST':
         if request.form.get('click') == 'End Round':
             global capture
             capture=1
-
-    elif request.method=='GET':
-        return render_template('rounds.html')
+        name1 = request.form.get('name1')
+        name2 = request.form.get('name2')
+        return render_template('rounds.html',player_blue=name1,player_green=name2)
     return render_template('rounds.html')
 
 @app.route('/video')
