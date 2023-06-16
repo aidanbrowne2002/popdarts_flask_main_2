@@ -27,7 +27,7 @@
                     <ul class="nav-links">
                         <li><a href="/">Home</a></li>
                         <li><a href="/match">Add Match</a></li>
-                        <li><a href="/graph">Graphs</a></li>
+                        <li><a href="{{ url_for('profile', user = current_user.name) }}">Profile</a></li>
                         <li><a href="/graphbig">Big Graphs</a></li>
                         <li><a href="/add_user">Add User</a></li>
                         <li><a href="/game">New Game</a></li>

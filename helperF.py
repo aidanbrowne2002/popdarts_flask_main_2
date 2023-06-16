@@ -124,6 +124,32 @@ def get_next_round_number():
     else:
         print("went here")
         round_numbers = get_files(temp_files)
+def getScoreMA(userID):
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
+    cursor = conn.cursor()
+    Query = """SELECT p.game_id,
+       AVG(p.score)
+       OVER(ORDER BY p.game_id ROWS BETWEEN 4 PRECEDING AND CURRENT ROW)
+       AS avgscore
+       FROM "PlayerInGame" p
+        WHERE p.player_id = %s;"""
+    cursor.execute(Query, (userID,))
+    data = cursor.fetchall()
+    x = [0]
+    y = [0]
+    for i in range(0, len(data)):
+        x.append(data[i][1])
+        y.append(data[i][0])
+    for p in range(0, len(x)):
+        x[p] = float(x[p])
+    x.remove(0)
+    y.remove(0)
+    data = (x, y)
+    return data
 
     if round_numbers:
         return max(round_numbers) + 1
