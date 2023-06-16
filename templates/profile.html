@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block content %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+
+
+    <script>
+window.onload = function() {
+    var gameIDs = {{ xdata }};
+    var movingAverages = {{ ydata }};
+    var mini = {{ min }};
+    var maxi = {{ max }};
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var gradientStroke = ctx.createLinearGradient(0, 0, 0, 450);
+    gradientStroke.addColorStop(0, 'rgba(58, 123, 213, 1)');
+    gradientStroke.addColorStop(1, 'rgba(58, 123, 213, 0.1)');
+
+    var dataPoints = gameIDs.map(function(e, i) {
+        return {
+            x: e,
+            y: movingAverages[i]
+        };
+    });
+
+    new Chart(ctx, {
+        type: "scatter",
+        data: {
+            datasets: [{
+                label: 'Moving Average',
+                data: dataPoints,
+                fill: false, // Set fill to false here
+                lineTension: 0.2,
+                backgroundColor: gradientStroke,
+                borderColor: "rgba(58, 123, 213, 1)",
+                borderWidth: 2,
+                pointRadius: 4,
+                pointBorderWidth: 2,
+                pointBackgroundColor: 'rgba(255, 255, 255, 1)',
+                pointHoverRadius: 6,
+                pointHoverBackgroundColor: 'rgba(58, 123, 213, 1)',
+                pointHoverBorderColor: 'rgba(58, 123, 213, 1)',
+                showLine: true
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Moving Average vs Game ID',
+                fontSize: 18
+            },
+            legend: {display: false},
+            tooltips: {
+                intersect: false,
+                mode: 'nearest',
+                backgroundColor: 'rgba(58, 123, 213, 0.6)'
+            },
+            scales: {
+                yAxes: [{ticks: {min: mini, max: maxi}}],
+                xAxes: [{
+                    type: 'linear',
+                    position: 'bottom',
+                    gridLines: {
+                        color: "rgba(0, 0, 0, 0.05)",
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        color: "rgba(0, 0, 0, 0.05)",
+                    }
+                }]
+            }
+        }
+    });
+}
+</script>
+
+
+
+
+
+{% endblock %}

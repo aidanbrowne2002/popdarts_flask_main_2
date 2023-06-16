@@ -190,5 +190,13 @@ def protected():
     return redirect('/')
 
 
+@app.route('/profile/<user>')
+def profile(user):
+    scoreMA = hf.getScoreMA(current_user.id)
+    print (scoreMA)
+    print (scoreMA[0], scoreMA[1])
+    return render_template("profile.html", ydata = scoreMA[0], xdata = scoreMA[1], min = min(scoreMA[0]), max = max(scoreMA[0])+1)
+
+
 if __name__ == '__main__':
     app.run()
