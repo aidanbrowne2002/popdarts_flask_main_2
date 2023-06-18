@@ -1,5 +1,4 @@
 from detecto import visualize
-import helper as hp
 import math
 
 def find_closest(labels, darts):

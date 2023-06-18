@@ -5,11 +5,11 @@
         <div class="score-bar">
             <div class="team blue-team">
               <div class="team-name" id="name1">{{ player_blue }}</div>
-              <div class="score">0</div>
+              <div class="b-score" id="blue-point">{{ b_points }}</div>
             </div>
             <div class="team green-team">
               <div class="team-name" id="name2">{{ player_green }}</div>
-              <div class="score">0</div>
+              <div class="g-score" id="green-point">{{ g_points }}</div>
             </div>
         </div>
         <div class="center-video">
@@ -21,6 +21,8 @@
             </div>
             <input type="hidden" name="name1" value="{{ player_blue }}">
             <input type="hidden" name="name2" value="{{ player_green }}">
+            <input type="hidden" name="blue-point" value="{{ b_points }}">
+            <input type="hidden" name="green-point" value="{{ g_points }}">
         </form>
     </body>
 </html>

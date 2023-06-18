@@ -8,11 +8,11 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 #make shots directory to save pics
-try:
-    os.mkdir('./rounds')
-    os.mkdir('./all_rounds')
-except OSError as error:
-    pass
+# try:
+#     os.mkdir('./rounds')
+#     os.mkdir('./all_rounds')
+# except OSError as error:
+#     pass
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -138,12 +138,19 @@ def game():
 @app.route('/rounds',methods=['POST'])
 def rounds():
     if request.method == 'POST': # Maybe another if statment
+        green_score, blue_score = request.form.get('green-point'), request.form.get('blue-point')
         if request.form.get('click') == 'End Round':
             global capture
             capture=1
-        name1 = request.form.get('name1')
-        name2 = request.form.get('name2')
-        return render_template('rounds.html',player_blue=name1,player_green=name2)
+
+            round_image = hf.last_image()
+            g_points, b_points = hf.logic(round_image)
+
+            blue_score += b_points
+            green_score += g_points
+
+        name1,name2 = request.form.get('name1'), request.form.get('name2')
+        return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=green_score,b_score=blue_score)
     return render_template('rounds.html')
 
 @app.route('/video')

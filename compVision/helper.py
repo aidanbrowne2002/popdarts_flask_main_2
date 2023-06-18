@@ -2,17 +2,17 @@ import matplotlib.pyplot as plt
 from detecto import core, utils
 from torch import stack
 
-def load_model(table):
+def load_model(image):
     # Load
     model = core.Model.load('compVision/Models_Versions/Test_ModelV2.pth', ['greenUp','blueUp','down','target'])
     # Test Image
-    image = utils.read_image(f'compVision/round_image/{table}.jpg')
+    # image = utils.read_image(f'compVision/rounds/{table}.jpg')
     # Prediction
     predictions = model.predict(image)
     # predictions format
     labels, boxes, scores = predictions
 
-    return labels, boxes, scores, image
+    return labels, boxes, scores
 
 def plot_center(centers, image):
     plt.imshow(image)

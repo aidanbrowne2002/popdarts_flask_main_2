@@ -3,10 +3,10 @@ import credentials #database credentials
 import users
 from werkzeug.security import check_password_hash, generate_password_hash
 # CompVision Stuff
-import cv2
-import os
+import cv2, os
+from compVision import helper as hp, warp_img as wImg, round_score as rs
 
-camera = cv2.VideoCapture(0) # Probs will need to change this from 0 to something else (Global)
+camera = cv2.VideoCapture(2) # Probs will need to change this from 0 to something else (Global)
 
 def tStamp():
     timestamp = datetime.datetime.now()
@@ -106,7 +106,7 @@ def generate_frames(capture):
             break
         if capture:
             capture=0
-            p = os.path.sep.join(['rounds', f"rounds_{get_next_round_number()}.jpg"])
+            p = os.path.sep.join(['compVision/rounds', f"rounds_{get_next_round_number()}.jpg"])
             cv2.imwrite(p, frame)
         try:
             ret, buffer = cv2.imencode('.jpg',frame)
@@ -115,6 +115,25 @@ def generate_frames(capture):
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') # generates the next frame
         except Exception as e:
             pass
+
+def logic(r_image):
+    # wImg.unwarp_img('compVision/round_image') # Toggle
+    labels, boxes, scores = hp.load_model(r_image) # Will need to find a way to get latest image
+    center_darts, labels, boxes, scores = hp.clean_data(labels, boxes, scores)
+    # print(boxes)
+    # print(center_darts)
+    closest, team, all_darts = rs.dart_system(labels, center_darts)
+    return team['green'], team['blue']
+
+def last_image():
+    files = os.listdir('compVision/rounds/')
+    image_files = [file for file in files if file.startswith('round_') and file.endswith('.jpg')]
+    sorted_files = sorted(image_files)
+    if sorted_files:
+        last_image = sorted_files[-1]
+        return last_image
+    else:
+        print("No image")
 
 def get_next_round_number():
     saved_files, temp_files = os.listdir('all_rounds'), os.listdir('rounds')
