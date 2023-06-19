@@ -6,7 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import cv2, os
 from compVision import helper as hp, warp_img as wImg, round_score as rs
 
-camera = cv2.VideoCapture(2) # Probs will need to change this from 0 to something else (Global)
+camera = cv2.VideoCapture(0) # 2 is camera
 
 def tStamp():
     timestamp = datetime.datetime.now()
