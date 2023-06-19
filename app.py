@@ -191,6 +191,14 @@ def profile(user):
     print (scoreMA[0], scoreMA[1])
     return render_template("profile.html", ydata = scoreMA[0], xdata = scoreMA[1], min = min(scoreMA[0]), max = max(scoreMA[0])+1)
 
+@app.route('/newgame')
+@login_required
+def newgame():
+    print("hello")
+    return render_template("manualgame.html")
+
+
+
 
 if __name__ == '__main__':
     app.run()
