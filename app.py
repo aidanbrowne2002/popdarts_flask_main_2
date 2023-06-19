@@ -193,6 +193,7 @@ def protected():
 
 
 @app.route('/profile/<user>')
+@login_required
 def profile(user):
     scoreMA = hf.getScoreMA(current_user.id)
     print (scoreMA)
