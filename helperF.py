@@ -173,7 +173,8 @@ def getPreviousGames(userID):
     cursor = conn.cursor()
     Query = """SELECT "PlayerInGame".player_id, "PlayerInGame".score, "PlayerInGame".game_id
     FROM "PlayerInGame"
-    WHERE game_id in (SELECT "PlayerInGame".game_id from "PlayerInGame" where player_id = %s order by game_id desc limit 5)"""
+    WHERE game_id in (SELECT "PlayerInGame".game_id from "PlayerInGame" where player_id = %s order by game_id desc limit 5)
+    order by game_id, player_id"""
     cursor.execute(Query, (userID,))
     data = cursor.fetchall()
     print (data)
