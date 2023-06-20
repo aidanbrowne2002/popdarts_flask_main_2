@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block content %}
+    <div class="content">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+    <canvas id="myChart" style="width:100%;max-width:900px"></canvas>
 
 
 
@@ -81,6 +82,30 @@ window.onload = function() {
 }
 </script>
 
+
+    <table>
+    <thead>
+        <tr>
+            <th>Game ID</th>
+            <th>Player 1 ID</th>
+            <th>Player 1 Score</th>
+            <th>Player 2 ID</th>
+            <th>Player 2 Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for game in game_data %}
+        <tr>
+            <td>{{ game[0] }}</td>
+            <td>{{ game[1] }}</td>
+            <td>{{ game[2] }}</td>
+            <td>{{ game[3] }}</td>
+            <td>{{ game[4] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    </div>
 
 
 

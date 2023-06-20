@@ -188,10 +188,12 @@ def protected():
 @app.route('/profile/<user>')
 @login_required
 def profile(user):
+
+    gamedata = hf.getPreviousGames(current_user.id)
+
     scoreMA = hf.getScoreMA(current_user.id)
-    print (scoreMA)
-    print (scoreMA[0], scoreMA[1])
-    return render_template("profile.html", ydata = scoreMA[0], xdata = scoreMA[1], min = min(scoreMA[0]), max = max(scoreMA[0])+1)
+
+    return render_template("profile.html", ydata = scoreMA[0], xdata = scoreMA[1], min = min(scoreMA[0]), max = max(scoreMA[0])+1, game_data = gamedata)
 
 
 if __name__ == '__main__':

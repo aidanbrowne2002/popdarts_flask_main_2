@@ -163,3 +163,22 @@ def getScoreMA(userID):
     y.remove(0)
     data = (x, y)
     return data
+
+def getPreviousGames(userID):
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
+    cursor = conn.cursor()
+    Query = """SELECT "PlayerInGame".player_id, "PlayerInGame".score, "PlayerInGame".game_id
+    FROM "PlayerInGame"
+    WHERE game_id in (SELECT "PlayerInGame".game_id from "PlayerInGame" where player_id = %s order by game_id desc limit 5)"""
+    cursor.execute(Query, (userID,))
+    data = cursor.fetchall()
+    print (data)
+    games = []
+    for x in range (0,5):
+        games.append([data[x*2][2],users.getname(data[x*2][0]),data[x*2][1],users.getname(data[x*2+1][0]),data[x*2+1][1]])
+    print(games)
+    return games
