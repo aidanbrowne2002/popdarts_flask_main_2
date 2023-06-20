@@ -131,21 +131,31 @@ def game():
     capture=0
     return render_template("game_start.html", autocompleteData=users.getUsernames())
 
-@app.route('/rounds',methods=['POST'])
+@app.route('/rounds',methods=['GET', 'POST'])
 def rounds():
+    print('it got here')
+    try:
+        name1, name2 = session.get('name1', None), session.get('name2', None)
+        print('process done')
+    except:
+        pass
     if request.method == 'POST':
+        print(scores.get_blue(),scores.get_green())
         name1,name2 = request.form.get('name1'), request.form.get('name2')
         if request.form.get('click') == 'End Round': # Capture image
             global capture
             capture=1
-            return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=scores.get_green(),b_score=scores.get_blue())
+            return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue()))
+        print("When past the if statement")
         # Either its from game_start or after image is captured from previous round
-        return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=scores.get_green(),b_score=scores.get_blue())
-    return render_template('rounds.html')
+        return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue()))
+    return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue()))
 
 @app.route('/procces',methods=['POST'])
 def processing():
     if request.method == 'POST':
+        name1,name2 = request.form.get('name1'), request.form.get('name2')
+        session['name1'], session['name2'] = name1, name2
         if request.form.get('next') == 'Next Round':
             round_image = hf.last_image()
             g_points, b_points = hf.logic(round_image)
