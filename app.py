@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash
 import os
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = credentials.secretkey
 
 #make shots directory to save pics
 try:
