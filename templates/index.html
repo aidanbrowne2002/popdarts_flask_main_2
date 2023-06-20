@@ -25,6 +25,9 @@
                     </tbody>
                 </table>
             </section>
+
+            {% if not today == [] %}
+
             <section class="table-section">
                 <h3>Latest Change</h3>
                 <table class="league-table">
@@ -46,6 +49,10 @@
                     </tbody>
                 </table>
             </section>
+
+
+            {% endif %}
+
 
             <div id="chart-container">
                 <canvas id="myChart"></canvas>
