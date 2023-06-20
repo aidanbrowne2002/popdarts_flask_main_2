@@ -65,7 +65,7 @@ def utility_processor():
 @app.route('/')
 def table():
     all_players_data = hf.newgraphdata()
-    return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data)
+    return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today = rating.getChangeToday(), all_players_data=all_players_data)
 
 
 @app.route('/match')
