@@ -149,9 +149,7 @@ def processing():
         if request.form.get('next') == 'Next Round':
             round_image = hf.last_image()
             g_points, b_points = hf.logic(round_image)
-            print("Procces was done")
-            scores.update_scores(b_points, g_points)
-    print("Got to here")
+            scores.update_scores(int(b_points), int(g_points))
     return redirect('/rounds')
 
 @app.route('/video')

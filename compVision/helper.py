@@ -6,7 +6,7 @@ def load_model(image):
     # Load
     model = core.Model.load('compVision/Models_Versions/Test_ModelV2.pth', ['greenUp','blueUp','down','target'])
     # Test Image
-    # image = utils.read_image(f'compVision/rounds/{table}.jpg')
+    image = utils.read_image(f'compVision/rounds/{image}')
     # Prediction
     predictions = model.predict(image)
     # predictions format
