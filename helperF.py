@@ -13,6 +13,10 @@ def tStamp():
     timestamp = timestamp.strftime("%m/%d/%Y, %H:%M:%S")
     return timestamp
 def convertFormMatch(form):
+    if not isinstance(form['score1'], int):
+        return ('error')
+    if not isinstance(form['score2'], int):
+        return ('error')
     data = ((form['name1'],int(form['score1'])),(form['name2'],int(form['score2'])))
     return data
 def convertFormUser(form):

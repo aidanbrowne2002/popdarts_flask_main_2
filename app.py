@@ -80,6 +80,8 @@ def confirmation():
     if request.method == 'POST':
         result = request.form
         result = hf.convertFormMatch(result)
+        if result == 'error':
+            return ("Incorrect score format, go back and try again")
         session['result'] = result
         if result[0][1] > result[1][1]:
             winner = result[0][0]
