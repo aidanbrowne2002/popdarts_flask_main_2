@@ -105,6 +105,7 @@ def generate_frames(capture):
         if not success:
             break
         if capture:
+            print("PICTURE TAKEN")
             capture=0
             p = os.path.sep.join(['compVision/rounds', f"rounds_{get_next_round_number()}.jpg"])
             cv2.imwrite(p, frame)
@@ -126,8 +127,8 @@ def logic(r_image):
     return team['green'], team['blue']
 
 def last_image():
-    files = os.listdir('compVision/rounds/')
-    image_files = [file for file in files if file.startswith('round_') and file.endswith('.jpg')]
+    files = os.listdir('compVision/rounds')
+    image_files = [file for file in files if file.startswith('rounds_') and file.endswith('.jpg')]
     sorted_files = sorted(image_files)
     if sorted_files:
         last_image = sorted_files[-1]
@@ -136,7 +137,7 @@ def last_image():
         print("No image")
 
 def get_next_round_number():
-    saved_files, temp_files = os.listdir('all_rounds'), os.listdir('rounds')
+    saved_files, temp_files = os.listdir('compVision/all_rounds'), os.listdir('compVision/rounds')
     if saved_files:
         round_numbers = get_files(saved_files)
     else:

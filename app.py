@@ -2,20 +2,16 @@ from flask import Flask, render_template, request, session, redirect, url_for, R
 import psycopg2, rating, users, helperF as hf, credentials
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
+
 import os
+from compVision import Score_tracker as st
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-#make shots directory to save pics
-# try:
-#     os.mkdir('./rounds')
-#     os.mkdir('./all_rounds')
-# except OSError as error:
-#     pass
-
 login_manager = LoginManager()
 login_manager.init_app(app)
+scores = st.Scores()
 
 # Create a user class with UserMixin
 class User(UserMixin):
@@ -137,21 +133,26 @@ def game():
 
 @app.route('/rounds',methods=['POST'])
 def rounds():
-    if request.method == 'POST': # Maybe another if statment
-        green_score, blue_score = request.form.get('green-point'), request.form.get('blue-point')
-        if request.form.get('click') == 'End Round':
+    if request.method == 'POST':
+        name1,name2 = request.form.get('name1'), request.form.get('name2')
+        if request.form.get('click') == 'End Round': # Capture image
             global capture
             capture=1
+            return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=scores.get_green(),b_score=scores.get_blue())
+        # Either its from game_start or after image is captured from previous round
+        return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=scores.get_green(),b_score=scores.get_blue())
+    return render_template('rounds.html')
 
+@app.route('/procces',methods=['POST'])
+def processing():
+    if request.method == 'POST':
+        if request.form.get('next') == 'Next Round':
             round_image = hf.last_image()
             g_points, b_points = hf.logic(round_image)
-
-            blue_score += b_points
-            green_score += g_points
-
-        name1,name2 = request.form.get('name1'), request.form.get('name2')
-        return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=green_score,b_score=blue_score)
-    return render_template('rounds.html')
+            print("Procces was done")
+            scores.update_scores(b_points, g_points)
+    print("Got to here")
+    return redirect('/rounds')
 
 @app.route('/video')
 def video():
