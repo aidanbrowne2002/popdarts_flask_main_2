@@ -69,7 +69,7 @@ def table():
 
 
 @app.route('/match')
-@login_required
+@login_requiredl
 def add_match():
     return render_template('addMatch.html', autocompleteData=users.getUsernames())
 
