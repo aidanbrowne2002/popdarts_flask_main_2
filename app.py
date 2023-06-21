@@ -59,6 +59,7 @@ def utility_processor():
 
 @app.route('/')
 def table():
+    hf.camera_off()
     all_players_data = hf.newgraphdata()
     return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data)
 
@@ -140,15 +141,16 @@ def rounds():
         if request.form.get('click') == 'End Round': # Capture image
             global capture
             capture=1
-            return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue()))
 
-        # elif request.form.get('confirm_done') == 'Submit': # Send image to process and next round
-        #     team, closest = request.form.get('teams'), request.form.get('closest')
-        #     scores.update_scores(int(team['blue']), int(team['green']))
         elif request.form.get('complete_round') == 'Submit':
-            closest = request.form.get('winning_dart')
+            closest = request.form.get('winning_dart') # For future data capture (also need all down darts)
             team_blue,team_green = request.form.get('blue_s'), request.form.get('green_s')
             scores.update_scores(int(team_blue), int(team_green))
+
+            end_match = hf.check_score(scores)
+            if end_match:
+                print(end_match)
+                return redirect('/match')
 
         # Either its from game_start or after image is captured from previous round
         print(scores.get_blue(),scores.get_green())
