@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Add Match
+{% endblock %}
+
+{% block content %}
+<h2>Confirm Results:</h2>
+<table>
+        <thead>
+            <tr>
+                <th>Team</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ player_blue }}</td>
+                <td><input type="text" id="blue_score" name="blue_score" value="{{ teams['blue'] }}"></td> <!-- We want this to be the text box with the auto fill of -->
+            </tr>
+            <tr>
+                <td>{{ player_green }}</td>
+                <td><input type="text" id="green_score" name="green_score" value="{{ teams['green'] }}"></td>
+            </tr>
+        </tbody>
+        <thead>
+            <tr>
+                <th>Closest</th>
+                <th>New Closest</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ winner_dart }}</td>
+                <td><select name="new_winner" id="closest"><option value="">--Please choose an option--</option>
+                    <option value="dog">blue</option>
+                    <option value="cat">green</option></select></td>
+            </tr>
+        </tbody>
+    </table>
+    <form action="/rounds" method="post">
+      <input type="submit" value="Submit">
+    </form>
+{% endblock %}

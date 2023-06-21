@@ -133,12 +133,6 @@ def game():
 
 @app.route('/rounds',methods=['GET', 'POST'])
 def rounds():
-    print('it got here')
-    try:
-        name1, name2 = session.get('name1', None), session.get('name2', None)
-        print('process done')
-    except:
-        pass
     if request.method == 'POST':
         print(scores.get_blue(),scores.get_green())
         name1,name2 = request.form.get('name1'), request.form.get('name2')
@@ -146,7 +140,9 @@ def rounds():
             global capture
             capture=1
             return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue()))
-        print("When past the if statement")
+        if request.form.get('confirm_done') == 'Submit':
+            team, closest = request.form.get('teams'), request.form.get('closest')
+            scores.update_scores(int(team['blue']), int(team['green']))
         # Either its from game_start or after image is captured from previous round
         return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue()))
     return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue()))
@@ -158,9 +154,15 @@ def processing():
         session['name1'], session['name2'] = name1, name2
         if request.form.get('next') == 'Next Round':
             round_image = hf.last_image()
-            g_points, b_points = hf.logic(round_image)
-            scores.update_scores(int(b_points), int(g_points))
-    return redirect('/rounds')
+            team, closest = hf.logic(round_image)
+            session['team'], session['closest'] = team, closest
+    return redirect('/score_confirm')
+
+@app.route('/score_confirm',methods=['GET','POST'])
+def score_confirm():
+    name1, name2 = session.get('name1', None), session.get('name2', None)
+    team, closest = session.get('team', None), session.get('closest', None)
+    return render_template('confirm_score.html',player_blue=name1,player_green=name2,teams=team,winner_dart=closest)
 
 @app.route('/video')
 def video():

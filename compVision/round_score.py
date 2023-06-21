@@ -81,11 +81,11 @@ def dart_system(labels, center_darts):
 
     closest, dart_score, all_darts = point_count(labels, distance) # all_darts are for future stats
 
-    closest, team = recalabrate(closest, dart_score)
+    # closest, team = recalabrate(closest, dart_score)
     # visualize.show_labeled_image(image, boxes, distance)
     # hp.plot_center(center_darts, image)
 
-    return closest, team, all_darts
+    return closest, dart_score
 # Notes
 """
 

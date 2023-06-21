@@ -123,8 +123,8 @@ def logic(r_image):
     center_darts, labels, boxes, scores = hp.clean_data(labels, boxes, scores)
     # print(boxes)
     # print(center_darts)
-    closest, team, all_darts = rs.dart_system(labels, center_darts)
-    return team['green'], team['blue']
+    closest, team = rs.dart_system(labels, center_darts)
+    return team, closest
 
 def last_image():
     files = os.listdir('compVision/rounds')
