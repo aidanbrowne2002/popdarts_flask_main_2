@@ -11,7 +11,6 @@ app.secret_key = 'your_secret_key'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-scores = st.Scores()
 
 # Create a user class with UserMixin
 class User(UserMixin):
@@ -127,25 +126,34 @@ def graph2():
 # ComputerVision Stuff
 @app.route('/game')
 def game():
+    global scores
     global capture
+    scores = st.Scores()
     capture=0
     return render_template("game_start.html", autocompleteData=users.getUsernames())
 
 @app.route('/rounds',methods=['GET', 'POST'])
 def rounds():
+    global scores
     if request.method == 'POST':
-        print(scores.get_blue(),scores.get_green())
         name1,name2 = request.form.get('name1'), request.form.get('name2')
         if request.form.get('click') == 'End Round': # Capture image
             global capture
             capture=1
             return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue()))
-        if request.form.get('confirm_done') == 'Submit':
-            team, closest = request.form.get('teams'), request.form.get('closest')
-            scores.update_scores(int(team['blue']), int(team['green']))
+
+        # elif request.form.get('confirm_done') == 'Submit': # Send image to process and next round
+        #     team, closest = request.form.get('teams'), request.form.get('closest')
+        #     scores.update_scores(int(team['blue']), int(team['green']))
+        elif request.form.get('complete_round') == 'Submit':
+            closest = request.form.get('winning_dart')
+            team_blue,team_green = request.form.get('blue_s'), request.form.get('green_s')
+            scores.update_scores(int(team_blue), int(team_green))
+
         # Either its from game_start or after image is captured from previous round
+        print(scores.get_blue(),scores.get_green())
         return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue()))
-    return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue()))
+    return render_template('rounds.html')#,player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue())) # Should turn this into a some error page
 
 @app.route('/procces',methods=['POST'])
 def processing():
