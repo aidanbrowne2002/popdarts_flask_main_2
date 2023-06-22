@@ -32,3 +32,7 @@ class Scores:
     def reset_scores(self):
         self.score_blue = 0
         self.score_green = 0
+
+    def reset_rounds(self):
+        self.rounds_blue = 0
+        self.rounds_green = 0
