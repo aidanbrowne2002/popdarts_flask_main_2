@@ -29,7 +29,7 @@ FROM
 INNER JOIN 
     "Users" ON "PlayerInGame".player_id = "Users".id
 INNER JOIN 
-    "Matches" ON "Matches".game_id = "PlayerInGame".game_id
+    "Matches" ON "Matches".match_id = "PlayerInGame".match_id
 WHERE 
     "Matches".occured >= CURRENT_DATE-1
 GROUP BY 
@@ -56,7 +56,7 @@ FROM
 INNER JOIN
     "Users" ON "PlayerInGame".player_id = "Users".id
 INNER JOIN
-    "Matches" ON "Matches".game_id = "PlayerInGame".game_id
+    "Matches" ON "Matches".match_id = "PlayerInGame".match_id
 WHERE
     "Matches".occured >= CURRENT_DATE-1 and "Users".id = %s
 GROUP BY
@@ -125,12 +125,12 @@ def addMatch(results):
         result = 0
     else:
         result = 1
-    Query = """ INSERT INTO "Matches" (place, result) VALUES (%s,%s) RETURNING game_id"""
+    Query = """ INSERT INTO "Matches" (place, result) VALUES (%s,%s) RETURNING match_id"""
     data = (place, result)
     cursor.execute(Query, data)
     gameid = cursor.fetchone()[0]
     for player in range(0,2):
-        Query = """ INSERT INTO "PlayerInGame" (game_id, player_id, home_away, score, rr_change) VALUES (%s,%s,%s,%s,%s)"""
+        Query = """ INSERT INTO "PlayerInGame" (match_id, player_id, home_away, score, rr_change) VALUES (%s,%s,%s,%s,%s)"""
         data = (gameid,results[player][0],player,results[player][1],results[player][3])
         cursor.execute(Query, data)
         Query = """update "Users" set rating = rating + %s where id = %s"""
@@ -145,9 +145,9 @@ def getRRChange(user):
                             password=credentials.password,
                             port=credentials.port)
     cursor = conn.cursor()
-    Query = """SELECT "PlayerInGame".rr_change, "Matches".game_id FROM "PlayerInGame"
+    Query = """SELECT "PlayerInGame".rr_change, "Matches".match_id FROM "PlayerInGame"
             inner join "Users" on "Users".id = "PlayerInGame".player_id
-            inner join "Matches" on "Matches".game_id = "PlayerInGame".game_id
+            inner join "Matches" on "Matches".match_id = "PlayerInGame".match_id
             where "Users".id = %s;"""
     cursor.execute(Query, (user,))
     data = cursor.fetchall()

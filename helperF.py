@@ -45,8 +45,8 @@ def convert_player_data(player_data_list):
     player_data = []
 
     for game in player_data_list:
-        game_id, rating = game
-        player_data.append({'game_sequence': game_id, 'rating': rating})
+        match_id, rating = game
+        player_data.append({'game_sequence': match_id, 'rating': rating})
 
     return player_data
 def getGraphData(user):
@@ -56,14 +56,14 @@ def getGraphData(user):
                             password=credentials.password,
                             port=credentials.port)
     cursor = conn.cursor()
-    Query = """SELECT "Matches".game_id, SUM("PlayerInGame".rr_change) as change FROM "PlayerInGame"
+    Query = """SELECT "Matches".match_id, SUM("PlayerInGame".rr_change) as change FROM "PlayerInGame"
                 INNER JOIN
                     "Users" ON "PlayerInGame".player_id = "Users".id
                 INNER JOIN
-                    "Matches" ON "Matches".game_id = "PlayerInGame".game_id
+                    "Matches" ON "Matches".match_id = "PlayerInGame".match_id
                 WHERE player_id = %s
-                GROUP BY "Matches".game_id
-                order by game_id"""
+                GROUP BY "Matches".match_id
+                order by match_id"""
     cursor.execute(Query,(user,))
     data = cursor.fetchall()
     data = [list(item) for item in data]  # Convert tuples to lists
@@ -85,14 +85,14 @@ def newgraphdata():
 
     all_players_data = {}
     for user_id in user_ids:
-        Query = """SELECT "Matches".game_id, SUM("PlayerInGame".rr_change) as change FROM "PlayerInGame"
+        Query = """SELECT "Matches".match_id, SUM("PlayerInGame".rr_change) as change FROM "PlayerInGame"
                             INNER JOIN
                                 "Users" ON "PlayerInGame".player_id = "Users".id
                             INNER JOIN
-                                "Matches" ON "Matches".game_id = "PlayerInGame".game_id
+                                "Matches" ON "Matches".match_id = "PlayerInGame".match_id
                             WHERE player_id = %s
-                            GROUP BY "Matches".game_id
-                            order by game_id"""
+                            GROUP BY "Matches".match_id
+                            order by match_id"""
         cursor.execute(Query, (user_id,))
         data = cursor.fetchall()
         data = [list(item) for item in data]  # Convert tuples to lists
@@ -201,9 +201,9 @@ def getScoreMA(userID):
                             password=credentials.password,
                             port=credentials.port)
     cursor = conn.cursor()
-    Query = """SELECT p.game_id,
+    Query = """SELECT p.match_id,
        AVG(p.score)
-       OVER(ORDER BY p.game_id ROWS BETWEEN 4 PRECEDING AND CURRENT ROW)
+       OVER(ORDER BY p.match_id ROWS BETWEEN 4 PRECEDING AND CURRENT ROW)
        AS avgscore
        FROM "PlayerInGame" p
         WHERE p.player_id = %s;"""
@@ -228,10 +228,10 @@ def getPreviousGames(userID):
                             password=credentials.password,
                             port=credentials.port)
     cursor = conn.cursor()
-    Query = """SELECT "PlayerInGame".player_id, "PlayerInGame".score, "PlayerInGame".game_id
+    Query = """SELECT "PlayerInGame".player_id, "PlayerInGame".score, "PlayerInGame".match_id
     FROM "PlayerInGame"
-    WHERE game_id in (SELECT "PlayerInGame".game_id from "PlayerInGame" where player_id = %s order by game_id desc limit 5)
-    order by game_id, player_id"""
+    WHERE match_id in (SELECT "PlayerInGame".match_id from "PlayerInGame" where player_id = %s order by match_id desc limit 5)
+    order by match_id, player_id"""
     cursor.execute(Query, (userID,))
     data = cursor.fetchall()
     print (data)
