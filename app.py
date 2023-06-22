@@ -2,17 +2,11 @@ from flask import Flask, render_template, request, session, redirect, url_for, R
 import psycopg2, rating, users, helperF as hf, credentials
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
+
 import os
 
 app = Flask(__name__)
 app.secret_key = credentials.secretkey
-
-#make shots directory to save pics
-try:
-    os.mkdir('./rounds')
-    os.mkdir('./all_rounds')
-except OSError as error:
-    pass
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -64,6 +58,7 @@ def utility_processor():
 
 @app.route('/')
 def table():
+    # hf.camera_off()
     all_players_data = hf.newgraphdata()
     return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today = rating.getChangeToday(), all_players_data=all_players_data)
 
@@ -133,20 +128,50 @@ def graph2():
 # ComputerVision Stuff
 @app.route('/game')
 def game():
+    hf.create_class()
     global capture
     capture=0
     return render_template("game_start.html", autocompleteData=users.getUsernames())
 
-@app.route('/rounds',methods=['POST'])
+@app.route('/rounds',methods=['GET', 'POST'])
 def rounds():
-    if request.method == 'POST': # Maybe another if statment
-        if request.form.get('click') == 'End Round':
+    if request.method == 'POST':
+        name1,name2 = request.form.get('name1'), request.form.get('name2')
+        if request.form.get('click') == 'End Round': # Capture image
             global capture
             capture=1
-        name1 = request.form.get('name1')
-        name2 = request.form.get('name2')
-        return render_template('rounds.html',player_blue=name1,player_green=name2)
-    return render_template('rounds.html')
+
+        elif request.form.get('complete_round') == 'Submit':
+            closest = request.form.get('winning_dart') # For future data capture (also need all down darts)
+            team_blue,team_green = request.form.get('blue_s'), request.form.get('green_s')
+            hf.update_scores(int(team_blue), int(team_green))
+
+            end_match = hf.check_score()
+            if end_match:
+                print(end_match)
+                return redirect('/match')
+
+        # Either its from game_start or after image is captured from previous round
+        print(hf.get_team('blue'),hf.get_team('green'))
+        return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(hf.get_team('green')),b_score=str(hf.get_team('blue')))
+    return render_template('rounds.html')#,player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue())) # Should turn this into a some error page
+
+@app.route('/procces',methods=['POST'])
+def processing():
+    if request.method == 'POST':
+        name1,name2 = request.form.get('name1'), request.form.get('name2')
+        session['name1'], session['name2'] = name1, name2
+        if request.form.get('next') == 'Next Round':
+            round_image = hf.last_image()
+            team, closest = hf.logic(round_image)
+            session['team'], session['closest'] = team, closest
+    return redirect('/score_confirm')
+
+@app.route('/score_confirm',methods=['GET','POST'])
+def score_confirm():
+    name1, name2 = session.get('name1', None), session.get('name2', None)
+    team, closest = session.get('team', None), session.get('closest', None)
+    return render_template('confirm_score.html',player_blue=name1,player_green=name2,teams=team,winner_dart=closest)
 
 @app.route('/video')
 def video():

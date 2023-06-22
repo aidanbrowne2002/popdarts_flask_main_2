@@ -3,10 +3,10 @@ import credentials #database credentials
 import users
 from werkzeug.security import check_password_hash, generate_password_hash
 # CompVision Stuff
-import cv2
-import os
+import cv2, os
+from compVision import helper as hp, warp_img as wImg, round_score as rs, Score_tracker as st
 
-camera = cv2.VideoCapture(0) # Probs will need to change this from 0 to something else (Global)
+camera = cv2.VideoCapture(0) # 2 is camera
 
 def tStamp():
     timestamp = datetime.datetime.now()
@@ -105,14 +105,50 @@ def newgraphdata():
     return all_players_data
 
 # Computer Vision Stuff
+def create_class():
+    global scores
+    scores = st.Scores()
+
+def update_scores(b,g):
+    print(b,g)
+    scores.update_scores(b, g)
+
+def get_team(colour):
+    if colour == 'blue':
+        return scores.get_blue()
+    elif colour == 'green':
+        return scores.get_green()
+    else:
+        print('incorrect team')
+
+def check_score():
+    if scores.get_blue() >= 11 and scores.get_blue() > scores.get_green(): # game won b
+        scores.update_rounds('blue')
+        scores.reset_scores()
+    elif scores.get_green() >= 11 and scores.get_green() > scores.get_blue(): # game won g
+        scores.update_rounds('green')
+        scores.reset_scores()
+
+    if scores.get_rounds_blue() == 3:
+        #scores.reset_rounds()
+        return 'match won blue'
+    elif scores.get_rounds_green() == 3:
+        #scores.reset_rounds()
+        return 'match won green'
+    return None
+
+def camera_off():
+    camera.release()
+
 def generate_frames(capture):
     while True:
         success, frame = camera.read()
         if not success:
             break
         if capture:
+            print("PICTURE TAKEN")
             capture=0
-            p = os.path.sep.join(['rounds', f"rounds_{get_next_round_number()}.jpg"])
+            p = os.path.sep.join(['compVision/rounds', f"rounds_{get_next_round_number()}.jpg"])
             cv2.imwrite(p, frame)
         try:
             ret, buffer = cv2.imencode('.jpg',frame)
@@ -122,8 +158,27 @@ def generate_frames(capture):
         except Exception as e:
             pass
 
+def logic(r_image):
+    # wImg.unwarp_img('compVision/round_image') # Toggle
+    labels, boxes, scores = hp.load_model(r_image) # Will need to find a way to get latest image
+    center_darts, labels, boxes, scores = hp.clean_data(labels, boxes, scores)
+    # print(boxes)
+    # print(center_darts)
+    closest, team = rs.dart_system(labels, center_darts)
+    return team, closest
+
+def last_image():
+    files = os.listdir('compVision/rounds')
+    image_files = [file for file in files if file.startswith('rounds_') and file.endswith('.jpg')]
+    sorted_files = sorted(image_files)
+    if sorted_files:
+        last_image = sorted_files[-1]
+        return last_image
+    else:
+        print("No image")
+
 def get_next_round_number():
-    saved_files, temp_files = os.listdir('all_rounds'), os.listdir('rounds')
+    saved_files, temp_files = os.listdir('compVision/all_rounds'), os.listdir('compVision/rounds')
     if saved_files:
         round_numbers = get_files(saved_files)
     else:

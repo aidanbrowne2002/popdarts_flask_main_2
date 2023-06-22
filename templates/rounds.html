@@ -2,22 +2,37 @@
 <html>
     <link rel="stylesheet" href='../static/game_page.css' />
     <body>
+
         <div class="score-bar">
+
             <div class="team blue-team">
               <div class="team-name" id="name1">{{ player_blue }}</div>
-              <div class="score">0</div>
+              <div class="b-score" id="blue-point">{{ b_score }}</div>
             </div>
+
             <div class="team green-team">
               <div class="team-name" id="name2">{{ player_green }}</div>
-              <div class="score">0</div>
+              <div class="g-score" id="green-point">{{ g_score }}</div>
             </div>
+
         </div>
+
         <div class="center-video">
             <img src="{{url_for('video')}}" class="center-image">
         </div>
+
         <form id="submit_round" action = "/rounds" method="POST">
             <div class="center-new_round">
-                <input type="submit" value="End Round" name="click">
+                <input type="submit" value="End Round" name="click"> <!-- Capture image -->
+            </div>
+            <input type="hidden" name="name1" value="{{ player_blue }}">
+            <input type="hidden" name="name2" value="{{ player_green }}">
+            <!-- <input type="hidden" name="blue-point" value="{{ b_points }}">
+            <input type="hidden" name="green-point" value="{{ g_points }}"> -->
+        </form>
+        <form id="next_round" action = "/procces" method="POST">
+            <div class="center-new_round">
+                <input type="submit" value="Next Round" name="next">
             </div>
             <input type="hidden" name="name1" value="{{ player_blue }}">
             <input type="hidden" name="name2" value="{{ player_green }}">
