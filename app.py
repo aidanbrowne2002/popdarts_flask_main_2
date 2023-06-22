@@ -4,7 +4,6 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from werkzeug.security import check_password_hash
 
 import os
-from compVision import Score_tracker as st
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -59,7 +58,7 @@ def utility_processor():
 
 @app.route('/')
 def table():
-    hf.camera_off()
+    # hf.camera_off()
     all_players_data = hf.newgraphdata()
     return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today=rating.getChangeToday(), all_players_data=all_players_data)
 
@@ -127,15 +126,13 @@ def graph2():
 # ComputerVision Stuff
 @app.route('/game')
 def game():
-    global scores
+    hf.create_class()
     global capture
-    scores = st.Scores()
     capture=0
     return render_template("game_start.html", autocompleteData=users.getUsernames())
 
 @app.route('/rounds',methods=['GET', 'POST'])
 def rounds():
-    global scores
     if request.method == 'POST':
         name1,name2 = request.form.get('name1'), request.form.get('name2')
         if request.form.get('click') == 'End Round': # Capture image
@@ -145,16 +142,16 @@ def rounds():
         elif request.form.get('complete_round') == 'Submit':
             closest = request.form.get('winning_dart') # For future data capture (also need all down darts)
             team_blue,team_green = request.form.get('blue_s'), request.form.get('green_s')
-            scores.update_scores(int(team_blue), int(team_green))
+            hf.update_scores(int(team_blue), int(team_green))
 
-            end_match = hf.check_score(scores)
+            end_match = hf.check_score()
             if end_match:
                 print(end_match)
                 return redirect('/match')
 
         # Either its from game_start or after image is captured from previous round
-        print(scores.get_blue(),scores.get_green())
-        return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue()))
+        print(hf.get_team('blue'),hf.get_team('green'))
+        return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(hf.get_team('green')),b_score=str(hf.get_team('blue')))
     return render_template('rounds.html')#,player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue())) # Should turn this into a some error page
 
 @app.route('/procces',methods=['POST'])

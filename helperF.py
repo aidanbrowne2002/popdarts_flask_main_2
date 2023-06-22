@@ -4,7 +4,7 @@ import users
 from werkzeug.security import check_password_hash, generate_password_hash
 # CompVision Stuff
 import cv2, os
-from compVision import helper as hp, warp_img as wImg, round_score as rs
+from compVision import helper as hp, warp_img as wImg, round_score as rs, Score_tracker as st
 
 camera = cv2.VideoCapture(0) # 2 is camera
 
@@ -99,21 +99,38 @@ def newgraphdata():
     return all_players_data
 
 # Computer Vision Stuff
-def check_score(scores):
-    print(scores.get_blue(),type(scores.get_blue()),int(scores.get_blue()))
+def create_class():
+    global scores
+    scores = st.Scores()
+
+def update_scores(b,g):
+    print(b,g)
+    scores.update_scores(b, g)
+
+def get_team(colour):
+    if colour == 'blue':
+        return scores.get_blue()
+    elif colour == 'green':
+        return scores.get_green()
+    else:
+        print('incorrect team')
+
+def check_score():
     if scores.get_blue() >= 11 and scores.get_blue() > scores.get_green(): # game won b
         scores.update_rounds('blue')
         scores.reset_scores()
     elif scores.get_green() >= 11 and scores.get_green() > scores.get_blue(): # game won g
         scores.update_rounds('green')
         scores.reset_scores()
-    elif scores.get_rounds_blue() == 3:
-        scores.reset_rounds()
+
+    if scores.get_rounds_blue() == 3:
+        #scores.reset_rounds()
         return 'match won blue'
     elif scores.get_rounds_green() == 3:
-        scores.reset_rounds()
+        #scores.reset_rounds()
         return 'match won green'
     return None
+
 def camera_off():
     camera.release()
 
