@@ -153,8 +153,8 @@ def rounds():
 
         # Either its from game_start or after image is captured from previous round
         print(hf.get_team('blue'),hf.get_team('green'))
-        return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(hf.get_team('green')),b_score=str(hf.get_team('blue')))
-    return render_template('rounds.html')#,player_blue=name1,player_green=name2,g_score=str(scores.get_green()),b_score=str(scores.get_blue())) # Should turn this into a some error page
+        return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(hf.get_team('green')),b_score=str(hf.get_team('blue')),g_rounds=str(hf.get_round('green')),b_rounds=str(hf.get_round('blue')))
+    return render_template('rounds.html') # Should turn this into a some error page
 
 @app.route('/procces',methods=['POST'])
 def processing():

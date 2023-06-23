@@ -121,6 +121,14 @@ def get_team(colour):
     else:
         print('incorrect team')
 
+def get_round(colour):
+    if colour == 'blue':
+        return scores.get_rounds_blue()
+    elif colour == 'green':
+        return scores.get_rounds_green()
+    else:
+        print('incorrect team')
+
 def check_score():
     if scores.get_blue() >= 11 and scores.get_blue() > scores.get_green(): # game won b
         scores.update_rounds('blue')

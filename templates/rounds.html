@@ -4,7 +4,6 @@
     <body>
 
         <div class="score-bar">
-
             <div class="team blue-team">
               <div class="team-name" id="name1">{{ player_blue }}</div>
               <div class="b-score" id="blue-point">{{ b_score }}</div>
@@ -14,7 +13,14 @@
               <div class="team-name" id="name2">{{ player_green }}</div>
               <div class="g-score" id="green-point">{{ g_score }}</div>
             </div>
-
+        </div>
+        <div class="rounds-bar">
+            <div class="rounds blue-team">
+                <div id="b_rounds">{{ b_rounds }}</div>
+            </div>
+            <div class="rounds green-team">
+                <div id="g_rounds">{{ g_rounds }}</div>
+            </div>
         </div>
 
         <div class="center-video">
