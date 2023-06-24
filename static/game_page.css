@@ -7,11 +7,27 @@
   margin-right: 3%;
 }
 
+.video-frame{
+  background-color: blueviolet;
+  width: 46%
+}
+
+.table-frame {
+  background-color: pink;
+  margin-right: 0;
+  margin-left: auto;
+  width: 46%;
+  float: right;
+}
+
 .live-video{
-  width: 45%;
-  height: 40%;
+  width: 100%;
+  height: 100%;
 }
 
 .center-button{
   background: blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
