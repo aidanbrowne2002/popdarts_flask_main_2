@@ -1,5 +1,5 @@
-.game-frame{
-  /* background: lightskyblue; */
+.page-frame{
+  background: lightskyblue;
   width: 95%;
   height: 95%;
   margin-top: 2%;
@@ -9,14 +9,14 @@
 }
 
 .video-frame{
-  /* background-color: blueviolet; */
+  background-color: blueviolet;
   width: 46%;
 
   align-self: flex-start;
 }
 
 .table-frame {
-  /* background-color: pink; */
+  background-color: pink;
   width: 46%;
   margin-right: 0;
   margin-left: auto;
@@ -29,8 +29,53 @@
 }
 
 .center-button{
-  /* background: blue; */
+  background: blue;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.score-bar {
+  position: fixed;
+  top: 3%;
+  left: 17%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 400px;
+  height: 65px;
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: 20px;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
+}
+
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  flex-grow: 1;
+  border-radius: 20px;
+}
+
+.blue-team {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.green-team {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.team-name {
+  font-weight: bold;
+}
+
+.score {
+  font-size: 24px;
+  margin-top: 5px;
 }
