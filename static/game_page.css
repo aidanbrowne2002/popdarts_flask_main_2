@@ -1,23 +1,26 @@
 .game-frame{
-  background: lightskyblue;
+  /* background: lightskyblue; */
   width: 95%;
   height: 95%;
   margin-top: 2%;
   margin-left: 3%;
   margin-right: 3%;
+  display: flex;
 }
 
 .video-frame{
-  background-color: blueviolet;
-  width: 46%
+  /* background-color: blueviolet; */
+  width: 46%;
+
+  align-self: flex-start;
 }
 
 .table-frame {
-  background-color: pink;
+  /* background-color: pink; */
+  width: 46%;
   margin-right: 0;
   margin-left: auto;
-  width: 46%;
-  float: right;
+  margin-top: 0;
 }
 
 .live-video{
@@ -26,7 +29,7 @@
 }
 
 .center-button{
-  background: blue;
+  /* background: blue; */
   display: flex;
   align-items: center;
   justify-content: center;
