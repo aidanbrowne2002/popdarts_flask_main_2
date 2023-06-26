@@ -8,6 +8,15 @@ from compVision import helper as hp, warp_img as wImg, round_score as rs, Score_
 
 camera = cv2.VideoCapture(0) # 2 is camera
 
+def connect_database():
+    conn = psycopg2.connect(database=credentials.database,
+                            host=credentials.host,
+                            user=credentials.user,
+                            password=credentials.password,
+                            port=credentials.port)
+    cursor = conn.cursor()
+    return cursor
+
 def tStamp():
     timestamp = datetime.datetime.now()
     timestamp = timestamp.strftime("%m/%d/%Y, %H:%M:%S")
@@ -28,12 +37,7 @@ def convertResult(result):
     data = [list(item) for item in result]
 
     Query = """SELECT id FROM "Users" WHERE f_name = %s"""
-    conn = psycopg2.connect(database=credentials.database,
-                            host=credentials.host,
-                            user=credentials.user,
-                            password=credentials.password,
-                            port=credentials.port)
-    cursor = conn.cursor()
+    cursor = connect_database()
     for x in range (0,2):
         cursor.execute(Query,(data[x][0],))
         data[x][0] = (cursor.fetchone()[0])#str((cursor.fetchone()[0]))
@@ -50,12 +54,7 @@ def convert_player_data(player_data_list):
 
     return player_data
 def getGraphData(user):
-    conn = psycopg2.connect(database=credentials.database,
-                            host=credentials.host,
-                            user=credentials.user,
-                            password=credentials.password,
-                            port=credentials.port)
-    cursor = conn.cursor()
+    cursor = connect_database()
     Query = """SELECT "Matches".match_id, SUM("PlayerInGame".rr_change) as change FROM "PlayerInGame"
                 INNER JOIN
                     "Users" ON "PlayerInGame".player_id = "Users".id
@@ -75,12 +74,7 @@ def getGraphData(user):
     return data
 
 def newgraphdata():
-    conn = psycopg2.connect(database=credentials.database,
-                            host=credentials.host,
-                            user=credentials.user,
-                            password=credentials.password,
-                            port=credentials.port)
-    cursor = conn.cursor()
+    cursor = connect_database()
     user_ids = users.getIDs()  # Example user ids
 
     all_players_data = {}
@@ -103,6 +97,10 @@ def newgraphdata():
         all_players_data[player_name] = data  # Store each player's data using their name as the key
 
     return all_players_data
+
+def preivous_game():
+    cursor = connect_database()
+    query = """SELECT match_id FROM """
 
 # Computer Vision Stuff
 def create_class():
@@ -203,12 +201,7 @@ def get_files(dir):
     return round_numbers
 
 def getScoreMA(userID):
-    conn = psycopg2.connect(database=credentials.database,
-                            host=credentials.host,
-                            user=credentials.user,
-                            password=credentials.password,
-                            port=credentials.port)
-    cursor = conn.cursor()
+    cursor = connect_database()
     Query = """SELECT p.match_id,
        AVG(p.score)
        OVER(ORDER BY p.match_id ROWS BETWEEN 4 PRECEDING AND CURRENT ROW)

@@ -15,7 +15,7 @@
                 <img src="{{url_for('video')}}" class="live-video">
                 <!-- <br> -->
                 <div class="center-button">
-                    <form id="playerGame" action = "/rounds" method="POST">
+                    <form id="player_game" action = "/rounds" method="POST">
                         <label for="name1">Name:</label>
                         <input type="text" id="name1" name="name1" autocomplete="off" />
                         <label for="team1">Team:</label>
@@ -35,12 +35,39 @@
                 </div>
             </div>
             <div class="table-frame">
-                <form>
-                    <!-- check box 1 -->
-                    <!-- check box 2 -->
-                    <!-- check box 3 -->
-                    <!-- check box 4 -->
-                </form>
+                <div class="previous-game">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Previous Game player name</th>
+                                <th>Previous Game player name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> 4 </td>
+                                <td> 7 </td>
+                            </tr>
+                            <!-- {% for round in p_game %}
+                                <tr>
+                                    <td>{{ row[0] }}</td>
+                                    <td>{{ row[1] }}</td>
+                                </tr>
+                            {% endfor %} -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="data-graph">
+
+                </div>
+                <div class="buttons-tab">
+                    <form id="graph_change" action="" method="POST">
+                        <button name="graph1-button">RRC</button> <!-- RR Change         -->
+                        <button name="graph1-button">SER</button> <!-- Score each round  -->
+                        <button name="graph1-button">MPR</button> <!-- Miss per round    -->
+                        <button name="graph1-button">CER</button> <!-- Closes each round -->
+                    </form>
+                </div>
             </div>
         </div>
     </body>
