@@ -35,30 +35,43 @@
   justify-content: center;
 }
 
-.score-bar {
-  position: fixed;
-  top: 3%;
-  left: 17%;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 400px;
-  height: 65px;
-  background-color: rgba(255, 255, 255, 0);
-  border-radius: 20px;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
+.scores-tally{
+  width: 46%;
+  margin-top: 2%;
+  margin-left: 3%;
+  position: relative;
 }
 
+.round-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72%;
+  margin: auto;
+}
 
 .team {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 5px;
   flex-grow: 1;
-  border-radius: 20px;
+  border-radius: 5px;
+}
+
+.games-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.games-bar .rounds {
+  padding: 1%;
+  width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .blue-team {
@@ -76,6 +89,6 @@
 }
 
 .score {
-  font-size: 24px;
-  margin-top: 5px;
+  font-size: 16px;
+  margin-top: 2px;
 }
