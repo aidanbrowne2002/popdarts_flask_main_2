@@ -39,7 +39,7 @@
                     <table class="table-game">
                         <thead>
                             <tr>
-                                <th>round_id</th>
+                                <th>Closest</th>
                                 <th>{{ last_name[0][1] }}</th>
                                 <th>{{ last_name[1][1] }}</th>
                             </tr>
@@ -47,9 +47,15 @@
                         <tbody>
                             {% for round in last_game %}
                                 <tr>
+                                    <td>
+                                        {% if round[4] != 0 %}
+                                            home: {{ round[4] }}
+                                        {% else %}
+                                            away: {{ round[5] }}
+                                        {% endif %}
+                                    </td>
                                     <td>{{ round[2] }}</td>
                                     <td>{{ round[3] }}</td>
-                                    <td>{{ round[4] }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>

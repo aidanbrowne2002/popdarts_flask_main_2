@@ -26,6 +26,7 @@
   margin-left:   5%;
   margin-right:  5%;
   margin-bottom: 2%;
+  margin-top: 2%;
 }
 
 .table-game{
@@ -33,6 +34,15 @@
   border-collapse: collapse;
   border-radius: 10px;
   overflow: hidden;
+}
+
+.data-graph{
+
+}
+
+.buttons-tab{
+  display: flex;
+  justify-content: center;
 }
 
 .live-video{

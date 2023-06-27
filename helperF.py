@@ -100,25 +100,28 @@ def newgraphdata():
 
 def preivous_game():
     cursor = connect_database()
-    query_game = """ SELECT DISTINCT pg.match_id, r.round_id, r.game_id, r.home_score, r.away_score FROM "Matches" AS ms
+    query_game = """ SELECT DISTINCT pg.match_id, r.round_id, r.home_score, r.away_score, r.home_closer, r.away_closer FROM "Matches" AS ms
                         INNER JOIN "Games" as ga ON ga.match_id = ms.match_id
                         INNER JOIN "Rounds" as r ON r.game_id = ga.game_id
                         INNER JOIN "PlayerInGame" as pg ON pg.match_id = ms.match_id
                         INNER JOIN "Users" as u ON u.id = pg.player_id
                         WHERE ms.complete = true
                         AND pg.match_id = (
-                            SELECT MAX(match_id)
-                            FROM "PlayerInGame"
-                        )
+                            SELECT MAX(pg.match_id)
+                            FROM "PlayerInGame" AS pg
+                            JOIN "Matches" AS ms ON pg.match_id = ms.match_id
+                            WHERE ms.complete = true)
                         ORDER BY r.round_id ASC;"""
-    query_name = """ SELECT ms.match_id, u.username FROM "PlayerInGame" as pg
+    query_name = """SELECT pg.match_id, u.username, ms.complete FROM "PlayerInGame" as pg
                         INNER JOIN "Matches" AS ms ON pg.match_id = ms.match_id
                         INNER JOIN "Users" as u ON u.id = pg.player_id
                         WHERE ms.complete = true
                         AND pg.match_id = (
-                            SELECT MAX(match_id)
-                            FROM "PlayerInGame"
-                        );"""
+                            SELECT MAX(pg.match_id)
+                            FROM "PlayerInGame" AS pg
+                            JOIN "Matches" AS ms ON pg.match_id = ms.match_id
+                            WHERE ms.complete = true)
+                        ORDER BY pg.match_id DESC;"""
 
     cursor.execute(query_game)
     game_data = cursor.fetchall()
