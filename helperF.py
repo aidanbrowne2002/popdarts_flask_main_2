@@ -100,7 +100,34 @@ def newgraphdata():
 
 def preivous_game():
     cursor = connect_database()
-    query = """SELECT match_id FROM """
+    query_game = """ SELECT DISTINCT pg.match_id, r.round_id, r.game_id, r.home_score, r.away_score FROM "Matches" AS ms
+                        INNER JOIN "Games" as ga ON ga.match_id = ms.match_id
+                        INNER JOIN "Rounds" as r ON r.game_id = ga.game_id
+                        INNER JOIN "PlayerInGame" as pg ON pg.match_id = ms.match_id
+                        INNER JOIN "Users" as u ON u.id = pg.player_id
+                        WHERE ms.complete = true
+                        AND pg.match_id = (
+                            SELECT MAX(match_id)
+                            FROM "PlayerInGame"
+                        )
+                        ORDER BY r.round_id ASC;"""
+    query_name = """ SELECT ms.match_id, u.username FROM "PlayerInGame" as pg
+                        INNER JOIN "Matches" AS ms ON pg.match_id = ms.match_id
+                        INNER JOIN "Users" as u ON u.id = pg.player_id
+                        WHERE ms.complete = true
+                        AND pg.match_id = (
+                            SELECT MAX(match_id)
+                            FROM "PlayerInGame"
+                        );"""
+
+    cursor.execute(query_game)
+    game_data = cursor.fetchall()
+    game_data = [list(item) for item in game_data]
+
+    cursor.execute(query_name)
+    name_data = cursor.fetchall()
+    name_data = [list(item) for item in name_data]
+    return game_data, name_data
 
 # Computer Vision Stuff
 def create_class():

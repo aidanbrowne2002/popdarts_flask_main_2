@@ -6,7 +6,7 @@
 
 {% block content %}
     <link rel="stylesheet" href='../static/game_page.css' />
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <body>
@@ -36,24 +36,22 @@
             </div>
             <div class="table-frame">
                 <div class="previous-game">
-                    <table>
+                    <table class="table-game">
                         <thead>
                             <tr>
-                                <th>Previous Game player name</th>
-                                <th>Previous Game player name</th>
+                                <th>round_id</th>
+                                <th>{{ last_name[0][1] }}</th>
+                                <th>{{ last_name[1][1] }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td> 4 </td>
-                                <td> 7 </td>
-                            </tr>
-                            <!-- {% for round in p_game %}
+                            {% for round in last_game %}
                                 <tr>
-                                    <td>{{ row[0] }}</td>
-                                    <td>{{ row[1] }}</td>
+                                    <td>{{ round[2] }}</td>
+                                    <td>{{ round[3] }}</td>
+                                    <td>{{ round[4] }}</td>
                                 </tr>
-                            {% endfor %} -->
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

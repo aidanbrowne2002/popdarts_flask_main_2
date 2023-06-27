@@ -131,7 +131,8 @@ def game():
     hf.create_class()
     global capture
     capture=0
-    return render_template("game_start.html", autocompleteData=users.getUsernames())
+    data, names = hf.preivous_game()
+    return render_template("game_start.html", autocompleteData=users.getUsernames(),last_game=data, last_name=names)
 
 @app.route('/rounds',methods=['GET', 'POST'])
 def rounds():

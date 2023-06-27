@@ -2,13 +2,13 @@
     "sqltools.connections": [
         {
             "previewLimit": 50,
-            "server": "localhost",
+            "server": "127.0.0.1",
             "port": 9967,
-            "askForPassword": true,
             "driver": "PostgreSQL",
+            "name": "PopdartsDatabase",
             "database": "postgres",
-            "name": "aidansDatabase",
-            "username": "super"
+            "username": "super",
+            "password": "Chonks11!"
         }
     ]
 }

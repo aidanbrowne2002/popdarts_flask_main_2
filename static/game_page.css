@@ -28,6 +28,13 @@
   margin-bottom: 2%;
 }
 
+.table-game{
+  background-color: #fff;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
 .live-video{
   width: 100%;
   height: 100%;
