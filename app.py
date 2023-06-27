@@ -128,11 +128,13 @@ def graph2():
 # ComputerVision Stuff
 @app.route('/game')
 def game():
-    hf.create_class()
     global capture
-    capture=0
+    capture = 0
+
+    all_players_data = hf.newgraphdata()
+    hf.create_class()
     data, names = hf.preivous_game()
-    return render_template("game_start.html", autocompleteData=users.getUsernames(),last_game=data, last_name=names)
+    return render_template("game_start.html", autocompleteData=users.getUsernames(),last_game=data, last_name=names, parse=rating.getTable(), now=hf.tStamp(), today = rating.getChangeToday(), all_players_data=all_players_data)
 
 @app.route('/rounds',methods=['GET', 'POST'])
 def rounds():

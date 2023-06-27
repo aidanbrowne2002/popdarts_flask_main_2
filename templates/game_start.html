@@ -7,6 +7,7 @@
 {% block content %}
     <link rel="stylesheet" href='../static/game_page.css' />
     <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <body>
@@ -62,7 +63,9 @@
                     </table>
                 </div>
                 <div class="data-graph">
-
+                    <div id="chart-container">
+                        <canvas id="myChart" ></canvas>
+                    </div>
                 </div>
                 <div class="buttons-tab">
                     <form id="graph_change" action="" method="POST">
@@ -93,6 +96,76 @@
                     e.preventDefault();
                 }
             });
+        });
+        const allPlayersData = {{ all_players_data | tojson }};
+        console.log(allPlayersData);
+        const lastName = {{ last_name | tojson }};
+        console.log(lastName);
+
+        // Define an array of contrasting colors
+        const colors = [
+            '#FF0000', // Red
+            '#00FF00', // Green
+            '#0000FF', // Blue
+            '#FF00FF', // Magenta
+            '#FFFF00', // Yellow
+            '#00FFFF', // Cyan
+            '#800080', // Purple
+            '#FFA500', // Orange
+            '#008000', // Dark Green
+            '#800000', // Maroon
+        ];
+
+        // Prepare the labels for the x-axis
+        let labels = [];
+        for (let player in allPlayersData) {
+            for (let game of allPlayersData[player]) {
+                if (!labels.includes(game[0])) {
+                    labels.push(game[0]);
+                }
+            }
+        }
+        labels.sort((a, b) => a - b);
+
+        // Prepare the datasets
+        let datasets = [];
+        let colorIndex = 0;
+        for (let player in allPlayersData) {
+            if (player == lastName[0][1] || player == lastName[1][1]){
+                let playerRatings = [];
+                let lastKnownRating = null;
+                for (let i = 0; i < labels.length; i++) {
+                    let game = allPlayersData[player].find(game => game[0] === labels[i]);
+                    if (game) {
+                        playerRatings[i] = game[1];
+                        lastKnownRating = game[1];
+                    } else {
+                        playerRatings[i] = lastKnownRating;
+                    }
+                }
+
+                datasets.push({
+                    label: player,
+                    data: playerRatings,
+                    fill: false,
+                    borderColor: colors[colorIndex % colors.length], // Use a contrasting color from the array
+                    tension: 0.1
+                });
+            }
+            colorIndex++;
+        }
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
         });
     </script>
 {% endblock %}

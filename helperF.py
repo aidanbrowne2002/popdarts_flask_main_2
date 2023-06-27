@@ -85,6 +85,7 @@ def newgraphdata():
                             INNER JOIN
                                 "Matches" ON "Matches".match_id = "PlayerInGame".match_id
                             WHERE player_id = %s
+                            AND complete = true
                             GROUP BY "Matches".match_id
                             order by match_id"""
         cursor.execute(Query, (user_id,))
