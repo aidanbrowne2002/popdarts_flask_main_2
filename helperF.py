@@ -113,7 +113,7 @@ def preivous_game():
                             JOIN "Matches" AS ms ON pg.match_id = ms.match_id
                             WHERE ms.complete = true)
                         ORDER BY r.round_id ASC;"""
-    query_name = """SELECT pg.match_id, u.username, ms.complete FROM "PlayerInGame" as pg
+    query_name = """SELECT pg.match_id, u.f_name, ms.complete FROM "PlayerInGame" as pg
                         INNER JOIN "Matches" AS ms ON pg.match_id = ms.match_id
                         INNER JOIN "Users" as u ON u.id = pg.player_id
                         WHERE ms.complete = true

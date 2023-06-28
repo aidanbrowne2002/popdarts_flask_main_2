@@ -1,5 +1,5 @@
 .page-frame{
-  background: lightskyblue;
+  /* background: lightskyblue; */
   width: 95%;
   height: 95%;
   margin-top: 2%;
@@ -9,13 +9,17 @@
 }
 
 .video-frame{
-  background-color: blueviolet;
+  /* background-color: blueviolet; */
   width: 46%;
   align-self: flex-start;
+  margin-left:   5%;
+  margin-right:  5%;
+  margin-bottom: 2%;
+  margin-top: 3%;
 }
 
 .table-frame {
-  background-color: pink;
+  /* background-color: pink; */
   width: 46%;
   margin-right: 0;
   margin-left: auto;
@@ -37,7 +41,7 @@
 }
 
 .data-graph{
-
+  
 }
 
 .buttons-tab{
@@ -51,7 +55,7 @@
 }
 
 .center-button{
-  background: blue;
+  /* background: blue; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,9 +78,9 @@
 
 .team {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
   padding: 5px;
   flex-grow: 1;
   border-radius: 5px;
@@ -92,8 +96,8 @@
   padding: 1%;
   width: 15%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 .blue-team {
@@ -113,4 +117,17 @@
 .score {
   font-size: 16px;
   margin-top: 2px;
+}
+
+.green-tag{
+  color: #28a745;
+}
+.blue-tag{
+  color: #007bff;
+}
+
+.title-tag{
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: 20px;
 }

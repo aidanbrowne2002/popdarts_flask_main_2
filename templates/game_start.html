@@ -17,17 +17,17 @@
                 <!-- <br> -->
                 <div class="center-button">
                     <form id="player_game" action = "/rounds" method="POST">
-                        <label for="name1">Name:</label>
+                        <label for="name1">Name: </label>
                         <input type="text" id="name1" name="name1" autocomplete="off" />
-                        <label for="team1">Team:</label>
-                        <strong>Blue</strong>
+                        <label for="team1">Team: </label>
+                        <strong class="blue-tag">Blue</strong>
                         <input type="hidden" id="team1" name="team1" value="Blue">
 
                         <br>
-                        <label for="name2">Name :</label>
+                        <label for="name2">Name: </label>
                         <input type="text" id="name2" name="name2" autocomplete="off" />
-                        <label for="team2">Team:</label>
-                        <strong>Green</strong>
+                        <label for="team2">Team: </label>
+                        <strong class="green-tag">Green</strong>
                         <input type="hidden" id="team2" name="team2" value="Green">
 
                         <br>
@@ -36,6 +36,7 @@
                 </div>
             </div>
             <div class="table-frame">
+                <text class="center-button title-tag">Previous Game</text>
                 <div class="previous-game">
                     <table class="table-game">
                         <thead>
@@ -68,12 +69,10 @@
                     </div>
                 </div>
                 <div class="buttons-tab">
-                    <form id="graph_change" action="" method="POST">
-                        <button name="graph1-button">RRC</button> <!-- RR Change         -->
-                        <button name="graph1-button">SER</button> <!-- Score each round  -->
-                        <button name="graph1-button">MPR</button> <!-- Miss per round    -->
-                        <button name="graph1-button">CER</button> <!-- Closes each round -->
-                    </form>
+                    <button name="graph1-button" title="RR Change">RRC</button> <!-- RR Change         -->
+                    <button name="graph2-button" title="Score each round">SER</button> <!-- Score each round  -->
+                    <button name="graph3-button" title="Miss per round">MPR</button> <!-- Miss per round    -->
+                    <button name="graph4-button" title="Closes each round">CER</button> <!-- Closes each round -->
                 </div>
             </div>
         </div>
@@ -96,76 +95,144 @@
                     e.preventDefault();
                 }
             });
-        });
-        const allPlayersData = {{ all_players_data | tojson }};
-        console.log(allPlayersData);
-        const lastName = {{ last_name | tojson }};
-        console.log(lastName);
 
+            RR_score();
+            $('button[name="graph1-button"]').click(function() {
+                if (onChart){
+                    onChart.destroy();
+                }
+                RR_score();
+            });
+            $('button[name="graph2-button"]').click(function() {
+                if (onChart){
+                    onChart.destroy();
+                }
+                score_each_round();
+            });
+            $('button[name="graph3-button"]').click(function() {
+                if (onChart){
+                    onChart.destroy();
+                }
+            });
+            $('button[name="graph4-button"]').click(function() {
+                if (onChart){
+                    onChart.destroy();
+                }
+            });
+        });
+
+        const allPlayersData = {{ all_players_data | tojson }};
+        const gameData = {{ last_game | tojson }};
+        const lastName = {{ last_name | tojson }};
+        let onChart;
         // Define an array of contrasting colors
         const colors = [
-            '#FF0000', // Red
-            '#00FF00', // Green
-            '#0000FF', // Blue
-            '#FF00FF', // Magenta
-            '#FFFF00', // Yellow
-            '#00FFFF', // Cyan
-            '#800080', // Purple
-            '#FFA500', // Orange
-            '#008000', // Dark Green
-            '#800000', // Maroon
+            '#28a745', // Green
+            '#007bff', // Blue
         ];
 
-        // Prepare the labels for the x-axis
-        let labels = [];
-        for (let player in allPlayersData) {
-            for (let game of allPlayersData[player]) {
-                if (!labels.includes(game[0])) {
-                    labels.push(game[0]);
-                }
-            }
-        }
-        labels.sort((a, b) => a - b);
-
-        // Prepare the datasets
-        let datasets = [];
-        let colorIndex = 0;
-        for (let player in allPlayersData) {
-            if (player == lastName[0][1] || player == lastName[1][1]){
-                let playerRatings = [];
-                let lastKnownRating = null;
-                for (let i = 0; i < labels.length; i++) {
-                    let game = allPlayersData[player].find(game => game[0] === labels[i]);
-                    if (game) {
-                        playerRatings[i] = game[1];
-                        lastKnownRating = game[1];
-                    } else {
-                        playerRatings[i] = lastKnownRating;
+        function score_each_round(){
+            // Prepare the labels for the x-axis
+            let labels = gameData.map(game => game[0]);
+            // Prepare the home and away scores
+            let homeScores = gameData.map(game => game[2]);
+            let awayScores = gameData.map(game => game[3]);
+            // Create the dataset for home scores
+            let homeDataset = {
+                label: 'Home',
+                data: homeScores,
+                backgroundColor: colors[0],
+                borderColor: colors[0],
+                borderWidth: 1
+            };
+            // Create the dataset for away scores
+            let awayDataset = {
+                label: 'Away',
+                data: awayScores,
+                backgroundColor: colors[1],
+                borderColor: colors[1],
+                borderWidth: 1
+            };
+            var ctx = document.getElementById('myChart').getContext('2d');
+            onChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [homeDataset, awayDataset]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Game'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Score'
+                            },
+                            beginAtZero: true
+                        }
                     }
                 }
-
-                datasets.push({
-                    label: player,
-                    data: playerRatings,
-                    fill: false,
-                    borderColor: colors[colorIndex % colors.length], // Use a contrasting color from the array
-                    tension: 0.1
-                });
-            }
-            colorIndex++;
+            });
         }
-
-        var ctx = document.getElementById('myChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: datasets
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
+        function RR_score() {
+            // Prepare the labels for the x-axis
+            let labels = [];
+            for (let player in allPlayersData) {
+                for (let game of allPlayersData[player]) {
+                    if (!labels.includes(game[0])) {
+                        labels.push(game[0]);
+                    }
+                }
             }
-        });
+            labels.sort((a, b) => a - b);
+
+            // Prepare the datasets
+            let datasets = [];
+            let colorIndex = 0;
+            for (let player in allPlayersData) {
+                if (player == lastName[0][1] || player == lastName[1][1]){
+                    let playerRatings = [];
+                    let lastKnownRating = null;
+                    for (let i = 0; i < labels.length; i++) {
+                        let game = allPlayersData[player].find(game => game[0] === labels[i]);
+                        if (game) {
+                            playerRatings[i] = game[1];
+                            lastKnownRating = game[1];
+                        } else {
+                            playerRatings[i] = lastKnownRating;
+                        }
+                    }
+
+                    datasets.push({
+                        label: player,
+                        data: playerRatings,
+                        fill: false,
+                        borderColor: colors[colorIndex % colors.length], // Use a contrasting color from the array
+                        tension: 0.1
+                    });
+                }
+                colorIndex++;
+            }
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+            onChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
     </script>
 {% endblock %}

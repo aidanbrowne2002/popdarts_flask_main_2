@@ -134,7 +134,7 @@ def game():
     all_players_data = hf.newgraphdata()
     hf.create_class()
     data, names = hf.preivous_game()
-    return render_template("game_start.html", autocompleteData=users.getUsernames(),last_game=data, last_name=names, parse=rating.getTable(), now=hf.tStamp(), today = rating.getChangeToday(), all_players_data=all_players_data)
+    return render_template("game_start.html", autocompleteData=users.getUsernames(),last_game=data, last_name=names, all_players_data=all_players_data)
 
 @app.route('/rounds',methods=['GET', 'POST'])
 def rounds():
