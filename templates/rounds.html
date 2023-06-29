@@ -5,26 +5,28 @@
 {% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href='../static/game_page.css' />
+    <link rel="stylesheet" href='../static/rounds.css' />
     <body>
         <div class="scores-tally">
             <div class="round-bar">
                 <div class="team blue-team">
-                    <div class="team-name" id="name1">{{ player_blue }}</div>
-                    <div class="b-score" id="blue-point">{{ b_score }}</div>
+                    <div class="team-name" id="name1">{{ player_name[1] }}</div>
+                    <div class="b-score" id="blue-point">{{ player_score[1] }}</div>
                 </div>
 
                 <div class="team green-team">
-                    <div class="team-name" id="name2">{{ player_green }}</div>
-                    <div class="g-score" id="green-point">{{ g_score }}</div>
+                    <div class="team-name" id="name2">{{ player_name[0] }}</div>
+                    <div class="g-score" id="green-point">{{ player_score[0] }}</div>
                 </div>
             </div>
             <div class="games-bar">
+                <h3 class="title-tag games-bar">Rounds</h3>
+                <br>
                 <div class="rounds blue-team">
-                    <div id="b_rounds">{{ b_rounds }}</div>
+                    <div id="b_rounds">{{ player_rounds[1] }}</div>
                 </div>
                 <div class="rounds green-team">
-                    <div id="g_rounds">{{ g_rounds }}</div>
+                    <div id="g_rounds">{{ player_rounds[0] }}</div>
                 </div>
             </div>
         </div>
@@ -34,14 +36,14 @@
                 <div class="center-button">
                     <form id="submit_round" action = "/rounds" method="POST">
                         <input type="submit" value="End Round" name="click"> <!-- Capture image -->
-                        <input type="hidden" name="name1" value="{{ player_blue }}">
-                        <input type="hidden" name="name2" value="{{ player_green }}">
+                        <input type="hidden" name="name1" value="{{ player_name[1] }}">
+                        <input type="hidden" name="name2" value="{{ player_name[0] }}">
                     </form>
                     <br>
                     <form id="next_round" action = "/procces" method="POST">
                         <input type="submit" value="Next Round" name="next">
-                        <input type="hidden" name="name1" value="{{ player_blue }}">
-                        <input type="hidden" name="name2" value="{{ player_green }}">
+                        <input type="hidden" name="name1" value="{{ player_name[1] }}">
+                        <input type="hidden" name="name2" value="{{ player_name[0] }}">
                     </form>
                 </div>
             </div>

@@ -139,7 +139,7 @@ def game():
 @app.route('/rounds',methods=['GET', 'POST'])
 def rounds():
     if request.method == 'POST':
-        name1,name2 = request.form.get('name1'), request.form.get('name2')
+        name = (request.form.get('name1'), request.form.get('name2'))
         if request.form.get('click') == 'End Round': # Capture image
             global capture
             capture=1
@@ -154,9 +154,11 @@ def rounds():
                 print(end_match)
                 return redirect('/match')
 
+        p_score = (str(hf.get_team('green')),str(hf.get_team('blue')))
+        p_rounds=(str(hf.get_round('green')),str(hf.get_round('blue')))
         # Either its from game_start or after image is captured from previous round
         print(hf.get_team('blue'),hf.get_team('green'))
-        return render_template('rounds.html',player_blue=name1,player_green=name2,g_score=str(hf.get_team('green')),b_score=str(hf.get_team('blue')),g_rounds=str(hf.get_round('green')),b_rounds=str(hf.get_round('blue')))
+        return render_template('rounds.html',player_name=name,player_score=p_score,player_rounds=p_rounds)
     return render_template('rounds.html') # Should turn this into a some error page
 
 @app.route('/procces',methods=['POST'])
