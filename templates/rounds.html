@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href='../static/rounds.css' />
+    <link rel="stylesheet" href='../static/round.css' />
     <body>
         <div class="scores-tally">
             <div class="round-bar">
@@ -20,8 +20,8 @@
                 </div>
             </div>
             <div class="games-bar">
-                <h3 class="title-tag games-bar">Rounds</h3>
-                <br>
+                <!-- <h3 class="title-tag games-bar">Rounds</h3>
+                <br> -->
                 <div class="rounds blue-team">
                     <div id="b_rounds">{{ player_rounds[1] }}</div>
                 </div>
@@ -47,8 +47,44 @@
                     </form>
                 </div>
             </div>
-            <div class="table-frame">
-
+            <div class="table-averages">
+                <h3>Stats</h3>
+                <table class="match-average">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Match Average</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Name Test</td>
+                            <td>Average</td>
+                        </tr>
+                        <tr>
+                            <td>Name Test</td>
+                            <td>Average</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="score-average">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Score Average</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Name Test</td>
+                            <td>Average</td>
+                        </tr>
+                        <tr>
+                            <td>Name Test</td>
+                            <td>Average</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </body>
