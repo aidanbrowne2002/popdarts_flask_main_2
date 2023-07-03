@@ -58,7 +58,7 @@ def utility_processor():
 
 @app.route('/')
 def table():
-    # hf.camera_off()
+    hf.camera_off()
     all_players_data = hf.newgraphdata()
     return render_template('index.html', parse=rating.getTable(), now=hf.tStamp(), today = rating.getChangeToday(), all_players_data=all_players_data)
 
@@ -66,12 +66,14 @@ def table():
 @app.route('/match')
 @login_required
 def add_match():
+    hf.camera_off()
     return render_template('addMatch.html', autocompleteData=users.getUsernames())
 
 
 @app.route('/confirmation', methods=['POST'])
 @login_required
 def confirmation():
+    hf.camera_off()
     if request.method == 'POST':
         result = request.form
         result = hf.convertFormMatch(result)
@@ -103,6 +105,7 @@ def submit_results():
 @app.route('/add_user')
 @login_required
 def add_user():
+    hf.camera_off()
     return render_template("addUser.html")
 
 @app.route('/user_confirm', methods=['POST'])
@@ -115,12 +118,14 @@ def user_confirm():
 
 @app.route('/graph')
 def graph():
+    hf.camera_off()
     data = rating.getRRChange(str(11))
     return render_template("graphs.html", xdata = data[0], ydata = data[1], min = min(data[1]), max = max(data[1]))
 
 
 @app.route('/graphbig')
 def graph2():
+    hf.camera_off()
     # List of user ids you want to plot
     all_players_data = hf.newgraphdata()
     return render_template('graphs2.html', all_players_data=all_players_data)
@@ -128,6 +133,7 @@ def graph2():
 # ComputerVision Stuff
 @app.route('/game')
 def game():
+    hf.camera_on()
     global capture
     capture = 0
 

@@ -4,9 +4,8 @@ import users
 from werkzeug.security import check_password_hash, generate_password_hash
 # CompVision Stuff
 import cv2, os
-from compVision import helper as hp, warp_img as wImg, round_score as rs, Score_tracker as st
+from compVision import helper as hp, warp_img as wImg, round_score as rs, score_tracker as st
 
-camera = cv2.VideoCapture(0) # 2 is camera
 
 def connect_database():
     conn = psycopg2.connect(database=credentials.database,
@@ -40,7 +39,7 @@ def convertResult(result):
     cursor = connect_database()
     for x in range (0,2):
         cursor.execute(Query,(data[x][0],))
-        data[x][0] = (cursor.fetchone()[0])#str((cursor.fetchone()[0]))
+        data[x][0] = (cursor.fetchone()[0]) # str((cursor.fetchone()[0]))
 
         data[x].append(rating.getRank(data[x][0]))
     return data
@@ -173,6 +172,19 @@ def check_score():
         #scores.reset_rounds()
         return 'match won green'
     return None
+
+def camera_on():
+    camera_found = False
+    global camera
+    for camera_index in range(10):  # Try camera indexes 0 to 9
+        camera = cv2.VideoCapture(camera_index)
+        if camera.isOpened():
+            print("on")
+            camera_found = True
+            break
+
+    if not camera_found:
+        print("set 0 - No camera found.")
 
 def camera_off():
     camera.release()

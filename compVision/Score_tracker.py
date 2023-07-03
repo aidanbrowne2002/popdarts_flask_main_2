@@ -2,6 +2,7 @@ class Scores:
     def __init__(self):
         self.score_blue   = 0
         self.score_green  = 0
+
         self.rounds_blue  = 0
         self.rounds_green = 0
 
