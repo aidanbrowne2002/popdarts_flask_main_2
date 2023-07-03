@@ -40,10 +40,7 @@
     background-color: blueviolet;
     width: 46%;
     align-self: flex-start;
-    margin-left:   5%;
-    margin-right:  5%;
-    margin-bottom: 2%;
-    margin-top: 3%;
+    margin: 3% 5% 2% 2%; /*Top, Right, Bottom, Left*/
 }
 
 .live-video{
@@ -51,7 +48,7 @@
     height: 100%;
 }
 
-.table-averages{
+.data-frame{
     background-color: pink;
     width: 46%;
     height: 10%;
@@ -60,11 +57,21 @@
     margin-top: 0;
     display: flex;
     justify-content: space-between;
+    flex-direction: column;
+}
+
+.averages{
+    /* background-color: cadetblue; */
+    width: 50%;
+    height: 10%;
+}
+
+.heading {
+    text-align: center;
 }
 
 .match-average,
 .score-average {
-    width: 45%;
     height: 10%;
     border-radius: 6px;
     overflow: hidden;
@@ -78,6 +85,9 @@
     text-align: center;
 }
 
+.graph{
+    background-color: rgb(143, 220, 20);
+}
 
 .team {
     display: flex;

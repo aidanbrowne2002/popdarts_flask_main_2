@@ -47,45 +47,88 @@
                     </form>
                 </div>
             </div>
-            <div class="table-averages">
-                <h3>Stats</h3>
-                <table class="match-average">
-                    <thead>
-                        <tr>
-                            <th>Player</th>
-                            <th>Match Average</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Name Test</td>
-                            <td>Average</td>
-                        </tr>
-                        <tr>
-                            <td>Name Test</td>
-                            <td>Average</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table class="score-average">
-                    <thead>
-                        <tr>
-                            <th>Player</th>
-                            <th>Score Average</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Name Test</td>
-                            <td>Average</td>
-                        </tr>
-                        <tr>
-                            <td>Name Test</td>
-                            <td>Average</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="data-frame">
+                <div class="averages">
+                    <h3 class="heading">Status</h3>
+                    <table class="match-average">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Match Average</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Name Test</td>
+                                <td>Average</td>
+                            </tr>
+                            <tr>
+                                <td>Name Test</td>
+                                <td>Average</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="score-average">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Score Average</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Name Test</td>
+                                <td>Average</td>
+                            </tr>
+                            <tr>
+                                <td>Name Test</td>
+                                <td>Average</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="graph">
+                    <h3 class="heading">Graphs</h3>
+                    <div id="chart-container">
+                        <canvas id="myChart" ></canvas>
+                    </div>
+                </div>
+                <div class="buttons-tab">
+                    <button name="graph1-button" title="NULL">NULL</button>
+                    <button name="graph2-button" title="NULL">NULL</button>
+                    <button name="graph3-button" title="NULL">NULL</button>
+                    <button name="graph4-button" title="NULL">NULL</button>
+                </div>
             </div>
         </div>
     </body>
+    <script>
+        $( function() {
+            
+            $('button[name="graph1-button"]').click(function() {
+                if (onChart){
+                    onChart.destroy();
+                }
+
+            });
+            $('button[name="graph2-button"]').click(function() {
+                if (onChart){
+                    onChart.destroy();
+                }
+
+            });
+            $('button[name="graph3-button"]').click(function() {
+                if (onChart){
+                    onChart.destroy();
+                }
+
+            });
+            $('button[name="graph4-button"]').click(function() {
+                if (onChart){
+                    onChart.destroy();
+                }
+                
+            });
+        });
+    </script>
 {% endblock %}
