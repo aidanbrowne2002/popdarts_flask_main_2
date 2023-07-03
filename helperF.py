@@ -179,7 +179,7 @@ def camera_on():
     for camera_index in range(10):  # Try camera indexes 0 to 9
         camera = cv2.VideoCapture(camera_index)
         if camera.isOpened():
-            print("on")
+            print('on',camera_index)
             camera_found = True
             break
 
@@ -187,7 +187,10 @@ def camera_on():
         print("set 0 - No camera found.")
 
 def camera_off():
-    camera.release()
+    if 'camera' in globals():
+        camera.release()
+    else:
+        print('No camera on atm')
 
 def generate_frames(capture):
     while True:
